@@ -1,0 +1,113 @@
+{% if section.blocks.size > 0 %}
+  <div class="row" data-section-id="{{ section.id }}" data-section-type="accordion">
+    <div id="{{section.settings.id}}" class="columns {{section.settings.classes}}">
+      {% assign ul_exists = false %}
+      {% assign ul_started = false %}
+      {% assign ul_just_closed = true %}
+      
+      {% for block in section.blocks %}
+        {% if block.type == "accordion_item" %}
+          {% assign ul_exists = true %}
+          {% if ul_just_closed %}
+            <ul class="accordion" data-accordion {% if section.settings.multi_expand %}data-multi-expand="true"{% endif %} {% if section.settings.all_closed %}data-allow-all-closed="true"{% endif %}>
+            {% assign ul_just_closed = false %}
+          {% endif %}
+          <li class="accordion-item {% if block.settings.open %}is-active{% endif %}" data-accordion-item {{ block.shopify_attributes }}>
+            <a href="#" class="accordion-title">{{block.settings.title}}</a>
+            <div class="accordion-content" data-tab-content>
+              {{block.settings.content}}
+            </div>
+          </li>
+        {% elsif block.type == "accordion_break" %}
+          {% if ul_exists and forloop.index0 > 0 %}
+            </ul>
+            {% assign ul_just_closed = true %}
+          {% endif %}
+          <h2>{{block.settings.title}}</h2>
+          <p>{{block.settings.content}}</p>
+        {% endif %}
+      {% endfor %}
+      {% if ul_exists %}</ul>{% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "FAQ's Accordion",
+    "settings": [
+      {
+          "type": "header",
+          "content": "HTML Container Settings"
+      },
+      {
+          "type": "textarea",
+          "id": "id",
+          "label": "ID"
+      },
+      {
+          "type": "textarea",
+          "id": "classes",
+          "label": "Classes"
+      },
+      {
+          "type": "header",
+          "content": "Accordion Settings"
+      },
+      {
+          "type": "checkbox",
+          "id": "multi_expand",
+          "label": "Allow Multiple Expanded",
+          "default": true
+      },
+      {
+          "type": "checkbox",
+          "id": "all_closed",
+          "label": "Allow All Closed",
+          "default": true
+      }
+    ],
+    "blocks":
+    [
+      {
+          "type": "accordion_item",
+          "name": "Accordion Item",
+          "settings":
+          [
+            {
+              "type": "textarea",
+              "id": "title",
+              "label": "Title"
+            },
+            {
+              "type": "textarea",
+              "id": "content",
+              "label": "Content"
+            },
+            {
+              "type": "checkbox",
+              "id": "open",
+              "label": "Start Open"
+            }
+          ]
+      },
+      {
+          "type": "accordion_break",
+          "name": "Accordion Break",
+          "settings":
+          [
+            {
+              "type": "textarea",
+              "id": "title",
+              "label": "Title"
+            },
+            {
+              "type": "textarea",
+              "id": "content",
+              "label": "Content"
+            }
+          ]
+      }
+    ]
+  }
+{% endschema %}

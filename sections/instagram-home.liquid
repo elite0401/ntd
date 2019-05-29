@@ -1,0 +1,83 @@
+<div class="instagram-collection {% if section.settings.full_width %}full-width{% endif %}" data-section-id="{{ section.id }}" data-instagram-access-token="{{ section.settings.access_token }}" data-image-count="{{ section.settings.image_count }}" data-hash-tag="{{section.settings.hash_tag}}" data-section-type="instagram-section" style="display:none;">
+    {% if section.settings.title != blank %}
+        <div class="row">
+            <div class="small-12 columns">
+                <h2>{{ section.settings.title | escape }}</h2>
+            </div>
+        </div>
+    {% endif %}
+    <div class="instagram-container row">
+        {% assign count = section.settings.image_count | minus: 1 %}
+        {% for i in (0..count) %}
+            <div class="{{section.settings.classes}} columns box box-{{ i }} photo" tabindex="0">
+                <a href="#" target="_blank" tabindex="-1" class="card__image-wrapper">
+                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg card__image' }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% if section.settings.show_button %}
+        <br>
+        <div class="row">
+            <div class="columns text-center">
+                <a href="#" class="button outline">{{ section.settings.button_label | escape }}</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "name": "Instagram",
+    "class": "instagram",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Heading"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_button",
+            "label": "Show button",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button label",
+            "default": "Follow Us"
+        },
+        {
+            "type": "text",
+            "id": "access_token",
+            "label": "Instagram Access Token",
+            "info": "Generate your access token at [apps.growthspark.com\/instagram\/web](http:\/\/apps.growthspark.com\/instagram\/web)"
+        },
+        {
+            "type": "text",
+            "id": "hash_tag",
+            "label": "Hash Tag",
+            "info": "This will pull the latest photos across all of Instagram matching this tag"
+        },
+        {
+            "type": "textarea",
+            "id": "classes",
+            "label": "Image Container Classes",
+            "default": "small-6 large-2"
+        },
+        {
+            "type": "number",
+            "id": "image_count",
+            "label": "Images Count",
+            "default": 12
+        }
+    ],
+    "presets": [
+        {
+        "name": "Instagram Feed",
+        "category": "Social Media/Promotional"
+        }
+    ]
+}
+{% endschema %}

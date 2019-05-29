@@ -1,0 +1,221 @@
+{% comment %} SpeedBoostr_2019 {% endcomment %}
+<div class="dyno-page">
+	<div class="row" data-section-id="{{ section.id }}" data-section-type="dyno">
+		{% assign in_slider = false %}
+	    {% assign slider_index = 0 %}
+		{%- for block in section.blocks -%}
+		    {% include 'dyno-page-block-vars' %}
+				{% if block.type == 'collection_prodocts' %}
+					{%- assign collection = collections[block.settings.collection] -%}
+					<div class="row original">
+					  {% if collection.products.size == 0 %}
+					    <p>{{ 'collections.general.no_matches' | t }}</p>
+					  {% elsif unpack_option > 0 %}
+					    {% include 'collection-grid-unpacked', grid_collection: collection, unpack_option: unpack_option, quick_view: block.settings.quick_view, grid_item_classes: block.settings.grid_item_classes  %}
+					  {% else %}
+					    {% for grid_product in collection.products %}
+					      {% include 'product-grid-item-block', grid_item_loop_index: forloop.index0, quick_view: block.settings.quick_view, grid_item_classes: block.settings.grid_item_classes, grid_item_add2cart: block.settings.display_addtocart_button %}
+					    {% else %}
+					      <p>{{ 'collections.general.no_matches' | t }}</p>
+					    {% endfor %}
+					  {% endif %}
+					</div>
+		    {% elsif block.type == "slider_start" %}
+		    	{% assign in_slider = true %}
+                <div
+                    class="dyno-slider {{block.settings.classes}}"
+                    data-slider-arrows="{{block.settings.arrows}}"
+                    data-slider-dots="{{block.settings.dots}}"
+                    data-slider-infinite="{{block.settings.infinite}}"
+                    data-slider-slides-to-show="{{block.settings.slides_to_show}}"
+                    data-slider-slides-to-show-small="{{block.settings.slides_to_show_small}}"
+                    data-slider-slides-to-show-medium="{{block.settings.slides_to_show_medium}}"
+                    data-slider-slides-to-scroll="{{block.settings.slides_to_scroll}}"
+                    data-slider-autoplay="{{block.settings.slider_autoplay}}"
+                    data-slider-autoplay-secs="{{block.settings.slider_autoplay_secs}}"
+										data-slider-speeed="{{block.settings.slider_speed}}"
+                    {{ block.shopify_attributes }}>
+            {% elsif block.type == "slider_end" %}
+            	{% assign in_slider = false %}
+                {% assign slider_index = 0 %}
+                </div>
+            {% elsif block.type == "video_content" %}
+                <div class="rel-position columns {{block.settings.classes}} {{ block.shopify_attributes }}">
+                    <div data-video class="video-embed-container" style="{%- if dyno_block_bgimage != blank -%}background-image:url({%- include 'image-src', image_src: dyno_block_bgimage, image_src_sizing: "2048x" %});{% endif %}">
+						<div id="vidtop-content">
+							<div class="vid-info">
+								{%- if dyno_block_header != "" -%}<h1>{{dyno_block_header}}</h1>{%- endif %}
+								{%- if dyno_block_text != "" -%}<p>{{dyno_block_text}}</p>{%- endif %}
+								{%- if dyno_block_btn_text != "" -%}<a href="{{dyno_block_btn_link}}" class="{{block.settings.btn_classes}}">{{dyno_block_btn_text}}</a>{%- endif %}
+							</div>
+						</div>
+                        <svg data-video-play class="video-overlay-play-button" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#fff"/>
+                            <polygon points="70, 55 70, 145 145, 100" fill="#fff"/>
+                        </svg>
+                        <iframe style="display:none;" data-src='{{dyno_block_video}}' allowFullScreen></iframe>
+                    </div>
+                </div>
+            {% elsif block.type == "our_promise" %}
+            <div class="dom-style-remove rel-position columns {{ block.settings.classes }}">
+              {%- if dyno_block_btn_link != "" and block.settings.btn_link_block -%}<a href="{{dyno_block_btn_link}}" {% if block.settings.btn_link_new %}target="_blank"{% endif %}>{% endif %}
+                    {%- if block.settings.bgcolor != "" -%}
+        				<div class="dyno-bg-overlay" style="background-color:{{block.settings.bgcolor}};{%- if block.settings.opacity != "" -%}opacity:{{block.settings.opacity}};{%- elsif section.settings.opacity != ""  -%}opacity:{{section.settings.opacity}};{%- endif -%}"></div>
+        			{%- elsif section.settings.bgcolor != "" -%}
+        				<div class="dyno-bg-overlay" style="background-color:{{section.settings.bgcolor}};{%- if block.settings.opacity != "" -%}opacity:{{block.settings.opacity}};{%- elsif section.settings.opacity != "" -%}opacity:{{section.settings.opacity}};{%- endif -%}"></div>
+        			{%- endif -%}
+        			{%- if dyno_block_bgimage != blank -%}<div class="dyno_img-bg" style="background-image:url({%- include 'image-src', image_src: dyno_block_bgimage, image_src_sizing: "2048x" %});"></div>{%- endif -%}
+			        <div class="text-container">
+                      <div class="block-content">
+                        {% if block.settings.preheader != blank %}
+                        <h6>{{ block.settings.preheader}}</h6>
+                        {% endif %}
+                        {% if block.settings.header != blank %}
+                        <h3>{{ block.settings.header }}</h3>
+                        {% endif %}
+                        <div class="row">
+                          <div class="dom-style-remove rel-position columns large-4 text-small text-center">
+                            <div class="text-container">
+                              <div class="block-content">
+                                <p>
+                                  <img class="promise-image lazyload" data-src="{{ block.settings.image_1 | img_url: "2048x" }}" />
+                                  <br />
+                                  <br />
+                                  {{ block.settings.first_promise_text }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="dom-style-remove rel-position columns large-4 text-small text-center">
+                            <div class="text-container">
+                              <div class="block-content">
+                                <p>
+                                  <img class="promise-image lazyload" data-src="{{ block.settings.image_2 | img_url: "2048x" }}" />
+                                  <br />
+                                  <br />
+                                  {{ block.settings.second_promise_text }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="dom-style-remove rel-position columns large-4 text-small text-center">
+                            <div class="text-container">
+                              <div class="block-content">
+                                <p>
+                                  <img class="promise-image lazyload" data-src="{{ block.settings.image_3 | img_url: "2048x" }}" />
+                                  <br />
+                                  <br />
+                                  {{ block.settings.third_promise_text }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    				</div>
+    				{%- if dyno_block_btn_link != "" and block.settings.btn_link_block -%}</a>{% endif %}
+            </div>
+            {% else %}
+            	{% if in_slider %}
+            		{% assign slider_index = slider_index | plus: 1 %}
+                {% endif %}
+               <div {% if block.settings.classes contains 'anchor' %}id="compare"{% endif %} class="dom-style-remove rel-position columns {{block.settings.classes}} {% if in_slider %}slider-index-{{slider_index}}{% endif %}" {{ block.shopify_attributes }} {% if in_slider and slider_index > 1 %}style="display:none;"{% endif %}>
+                 {%- if dyno_block_btn_link != "" and block.settings.btn_link_block -%}<a href="{{dyno_block_btn_link}}" {% if block.settings.btn_link_new %}target="_blank"{% endif %}>{% endif %}
+
+                    {%- if block.settings.bgcolor != "" -%}
+        				<div class="dyno-bg-overlay" style="background-color:{{block.settings.bgcolor}};{%- if block.settings.opacity != "" -%}opacity:{{block.settings.opacity}};{%- elsif section.settings.opacity != ""  -%}opacity:{{section.settings.opacity}};{%- endif -%}"></div>
+        			{%- elsif section.settings.bgcolor != "" -%}
+        				<div class="dyno-bg-overlay" style="background-color:{{section.settings.bgcolor}};{%- if block.settings.opacity != "" -%}opacity:{{block.settings.opacity}};{%- elsif section.settings.opacity != "" -%}opacity:{{section.settings.opacity}};{%- endif -%}"></div>
+        			{%- endif -%}
+        			{%- if dyno_block_bgimage != blank -%}<div class="dyno_img-bg" style="background-image:url({%- include 'image-src', image_src: dyno_block_bgimage, image_src_sizing: "2048x" %});"></div>{%- endif -%}
+							{% if block.settings.watch_embed != blank %}
+								{{ block.settings.watch_embed }}
+								<span class="watch-text">Watch the video</span>
+							{% endif %}
+			        <div class="text-container">
+                        {%- if dyno_block_image_1 != blank -%}
+							<div class="block-images block-image-1">
+								{% if block.settings.image_1_link != blank %}<a href="{{block.settings.image_1_link}}" {% if block.settings.image_1_link_new %}target="_blank"{% endif %}>{% endif %}
+									{% include 'image-tag',
+							            image_tag_src : dyno_block_image_1,
+							            image_tag_alt: dyno_block_header,
+                              			image_tag_classes: 'lazyload' %}
+								{% if block.settings.image_1_link != blank %}</a>{% endif %}
+								{%- if block.settings.image_1_text != "" -%}
+								    <p>{{block.settings.image_1_text}}</p>
+								{%- endif -%}
+							</div>
+							{% if block.settings.watch_embed != blank %}
+								{{ block.settings.watch_embed }}
+								<span class="watch-text">Watch the video</span>
+							{% endif %}
+						{%- endif -%}
+						{%- if dyno_block_image_2 != blank -%}
+							<div class="block-images block-image-2">
+								{% if block.settings.image_2_link != blank %}<a href="{{block.settings.image_2_link}}" {% if block.settings.image_2_link_new %}target="_blank"{% endif %}>{% endif %}
+									{% include 'image-tag',
+							            image_tag_src : dyno_block_image_2,
+							            image_tag_alt: dyno_block_header,
+                              			image_tag_classes: 'lazyload'  %}
+								{% if block.settings.image_2_link != blank %}</a>{% endif %}
+								{%- if block.settings.image_2_text != "" -%}
+								    <p>{{block.settings.image_2_text}}</p>
+								{%- endif -%}
+							</div>
+						{%- endif -%}
+						{%- if dyno_block_image_3 != blank -%}
+							<div class="block-images block-image-3">
+								{% if block.settings.image_3_link != blank %}<a href="{{block.settings.image_3_link}}" {% if block.settings.image_3_link_new %}target="_blank"{% endif %}>{% endif %}
+									{% include 'image-tag',
+							            image_tag_src : dyno_block_image_3,
+							            image_tag_alt: dyno_block_header,
+                              			image_tag_classes: 'lazyload'  %}
+								{% if block.settings.image_3_link != blank %}</a>{% endif %}
+								{%- if block.settings.image_3_text != "" -%}
+								    <p>{{block.settings.image_3_text}}</p>
+								{%- endif -%}
+							</div>
+						{%- endif -%}
+						{%- if block.settings.preheader != "" or dyno_block_header != "" or dyno_block_btn_text != blank or dyno_block_text != "" or dyno_block_object_text != "" -%}
+							<div class="block-content">
+								{%- if block.settings.preheader != "" -%}
+									<h6>{{block.settings.preheader}}</h6>
+								{%- endif -%}
+								{%- if dyno_block_header != "" -%}
+								    <h3><span>{{dyno_block_header}}</span></h3>
+								{%- endif -%}
+								{% if block.type == "product" and block.settings.product_price %}
+									<div class="prod-price" data-product-id="{{ dyno_block_object.id}}">
+										<span data-product-price class="{% unless dyno_block_object.tags contains "price-static" %}price-display{% endunless %}">
+											{{ dyno_block_object.price_min | money }}
+										</span>
+										{% if dyno_block_object.compare_at_price_max > dyno_block_object.price %}
+											<span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+											<s data-compare-price class="{% unless dyno_block_object.tags contains "price-static" %}price-display{% endunless %}">
+												{% if dyno_block_object.compare_at_price > dyno_block_object.price %}
+													{{ dyno_block_object.compare_at_price | money }}
+												{% endif %}
+											</s>
+										{% endif %}
+							        </div>
+								{% endif %}
+								{%- if dyno_block_text != "" -%}
+								    <p>{{dyno_block_text}}</p>
+								{%- endif -%}
+								{%- if dyno_block_object_text != "" -%}
+								    <p>{{dyno_block_object_text}}</p>
+								{%- endif -%}
+								{%- if dyno_block_btn_text != "" -%}
+									<a href="{{dyno_block_btn_link}}" {% if block.settings.btn_link_new %}target="_blank"{% endif %} class="{{block.settings.btn_classes}}" {{dyno_block_btn_attributes}}> {{dyno_block_btn_text}} </a>
+								{%- endif -%}
+							</div>
+						{%- endif -%}
+    				</div>
+
+    				{%- if dyno_block_btn_link != "" and block.settings.btn_link_block -%}</a>{% endif %}
+    			</div>
+
+    		{% endif %}
+		{%- endfor -%}
+	</div>
+</div>

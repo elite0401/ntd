@@ -1,0 +1,147 @@
+<div style="display:none;" class="dom-style-remove" data-section-type="mega-menu" data-section-id="{{section.id}}">
+{% if section.blocks.size > 0 %}
+  <div data-mega-menu data-menu="mega-menu-{{menu_number}}" data-parent="{{ section.settings.parent | handleize }}" class="dropdown_container mega-menu mega-menu-1">
+    <div class="dropdown menu dropdown-pane bottom" id="mega-menu-{{menu_number}}" data-dropdown data-options="closeOnClick:true; hoverDelay: 5;hover: true; hoverPane: true;">
+      <div class="row">
+        {% for block in section.blocks %}
+          <div class="columns {% if block.settings.column_classes != "" %}{{block.settings.column_classes}}{% elsif section.blocks.size == 1 %}large-12{% elsif section.blocks.size == 2 %}large-6{% elsif section.blocks.size == 3 %}large-4{% else %}large-3{% endif %}" {{ block.shopify_attributes }}>
+            {% if block.type == 'column' %}
+              {% comment %}Richtext{% endcomment %}
+              {% if block.settings.richtext_top %}
+                <div class="mega-menu__richtext">
+                  {{ block.settings.richtext_top }}
+                </div>
+              {% endif %}
+
+              {% comment %}Image with caption and link{% endcomment %}
+              {% if block.settings.image_top != nil or block.settings.image_caption_top != blank %}
+                <div class="mega-menu__image-caption-link">
+                  <a {% if block.settings.image_link_top != blank %}href="{{ block.settings.image_link_top }}"{% endif %} >
+                    {% if block.settings.image_top != nil %}
+                      {% include 'image-tag',
+							            image_tag_src : block.settings.image_top,
+							            image_tag_alt: block.settings.image_top.alt,
+							            image_tag_sizing: '500x',
+							            image_tag_classes: 'lazyload' %}
+                    {% endif %}
+                    {% if block.settings.image_caption_top %}
+                      <p>{{ block.settings.image_caption_top }}</p>
+                    {% endif %}
+                  </a>
+                </div>
+              {% endif %}
+
+              {% comment %}Menu 1{% endcomment %}
+              {% if block.settings.menu_1 != blank %}
+                <div class="dropdown_column__menu">
+                  <ul class="dropdown_title no-bullets">
+                    <li>
+                      <a {% if block.settings.menu_1_link %}href="{{ block.settings.menu_1_link }}"{% endif %}>{{ linklists[block.settings.menu_1].title }}</a>
+                    </li>
+                  </ul>
+                  {% if linklists[block.settings.menu_1] != empty %}
+                    <ul class="no-bullets">
+                      {% for sublink in linklists[block.settings.menu_1].links %}
+                        <li>
+                          <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% comment %}Menu 2{% endcomment %}
+              {% if block.settings.menu_2 != blank %}
+                <div class="dropdown_column__menu">
+                  <ul class="dropdown_title no-bullets">
+                    <li>
+                      <a {% if block.settings.menu_2_link %}href="{{ block.settings.menu_2_link }}"{% endif %}>{{ linklists[block.settings.menu_2].title }}</a>
+                    </li>
+                  </ul>
+                  {% if linklists[block.settings.menu_2] != empty %}
+                    <ul class="no-bullets">
+                      {% for sublink in linklists[block.settings.menu_2].links %}
+                        <li>
+                          <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% comment %}Menu 3{% endcomment %}
+              {% if block.settings.menu_3 != blank %}
+                <div class="dropdown_column__menu">
+                  <ul class="dropdown_title no-bullets">
+                    <li>
+                      <a {% if block.settings.menu_3_link %}href="{{ block.settings.menu_3_link }}"{% endif %}>{{ linklists[block.settings.menu_3].title }}</a>
+                    </li>
+                  </ul>
+                  {% if linklists[block.settings.menu_3] != empty %}
+                    <ul class="no-bullets">
+                      {% for sublink in linklists[block.settings.menu_3].links %}
+                        <li>
+                          <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% comment %}Menu 4{% endcomment %}
+              {% if block.settings.menu_4 != blank %}
+                <div class="dropdown_column__menu">
+                  <ul class="dropdown_title no-bullets">
+                    <li>
+                      <a {% if block.settings.menu_4_link %}href="{{ block.settings.menu_4_link }}"{% endif %}>{{ linklists[block.settings.menu_4].title }}</a>
+                    </li>
+                  </ul>
+                  {% if linklists[block.settings.menu_4] != empty %}
+                    <ul class="no-bullets">
+                      {% for sublink in linklists[block.settings.menu_4].links %}
+                        <li>
+                          <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% comment %}Image with caption and link{% endcomment %}
+              {% if block.settings.image_bottom != nil or block.settings.image_caption_bottom != blank %}
+                <div class="mega-menu__image-caption-link">
+                  <a {% if block.settings.image_link_bottom != blank %}href="{{ block.settings.image_link_bottom }}"{% endif %} >
+                    {% if block.settings.image_bottom != nil %}
+                      {% include 'image-tag',
+							            image_tag_src : block.settings.image_bottom,
+							            image_tag_alt: block.settings.image_bottom.alt,
+							            image_tag_sizing: '500x',
+							            image_tag_classes: 'lazyload' %}
+                    {% endif %}
+                    {% if block.settings.image_caption_bottom %}
+                      <p>{{ block.settings.image_caption_bottom }}</p>
+                    {% endif %}
+                  </a>
+                </div>
+              {% endif %}
+
+              {% comment %}Richtext{% endcomment %}
+              {% if block.settings.richtext_bottom %}
+                <div class="mega-menu__richtext">
+                  {{ block.settings.richtext_bottom }}
+                </div>
+              {% endif %}
+
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+</div>

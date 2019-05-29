@@ -1,0 +1,16 @@
+{%- assign page_handle = "index" -%}
+
+{%- comment %}Template specific overides{%- endcomment %}
+{%- if template.name == 'product' -%}
+  {%- assign page_handle = product.handle -%}
+{%- elsif template.name == 'article' -%}
+  {%- assign page_handle = article.handle -%}
+{%- elsif template.name == 'blog' -%}
+  {%- assign page_handle = blog.handle -%}
+{%- elsif template.name == 'password' -%}
+  {%- assign page_handle = "password" -%}
+{%- elsif template.name == 'collection' -%}
+  {%- assign page_handle = collection.handle -%}
+{%- elsif template.name == 'page' -%}
+  {%- assign page_handle = page.handle -%}
+{%- endif -%}

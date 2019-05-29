@@ -1,0 +1,1 @@
+{% layout none %}{% comment %} Special template to have the theme call the pricing rules settings via ajax {% endcomment %}{% capture pricing_rules_json %}{% section 'pricing-rules' %}{% endcapture %}{{ pricing_rules_json | replace: '<div id="shopify-section-pricing-rules" class="shopify-section pricing-rules">', '' | replace: "</div>", "" | strip }}

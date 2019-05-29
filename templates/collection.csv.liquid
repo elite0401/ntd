@@ -1,0 +1,16 @@
+{%- layout none %}
+{%- capture csv_content %}
+{%- assign collection = collections.all %}
+{%- paginate collection.products by 10000 %}
+handle,product_id,variant_id,color_option,variant_image
+{%- for product in collection.products %}
+{%- for variant in product.variants %}
+{%- assign color_value = "" %}
+{%- if product.options[0] == "Color" or product.options[0] == "color" %}
+	{%- assign color_value = variant.option1 %}
+{%- elsif product.options[1] == "Color" or product.options[1] == "color" %}
+	{%- assign color_value = variant.option2 %}
+{%- elsif product.options[2] == "Color" or product.options[2] == "color" %}
+	{%- assign color_value = variant.option3 %}
+{%- endif %}{%- if color_value == "" %}{% continue %}{% endif %}"{{product.handle}}","{{product.id}}","{{variant.id}}","{{color_value}}","https:{{variant.image | img_url: "2048x"}}"
+{%- endfor %}{%- endfor %}{%- endpaginate %}{%- endcapture %}{{ csv_content | strip }}

@@ -1,0 +1,15 @@
+<!-- /snippets/collection-sorting.liquid -->
+<div class="collection-sorting">
+  <select data-sort-by>
+    <option value="sortby" selected="selected" disabled="disabled">{{ 'collections.sorting.title' | t }}</option>
+    {% if section.settings.sorting_featured %}<option value="manual">{{ 'collections.sorting.featured' | t }}</option>{% endif %}
+    {% if section.settings.sorting_best_selling %}<option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>{% endif %}
+    {% if section.settings.sorting_az %}<option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>{% endif %}
+    {% if section.settings.sorting_az %}<option value="title-descending">{{ 'collections.sorting.za' | t }}</option>{% endif %}
+    {% if section.settings.sorting_price %}<option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>{% endif %}
+    {% if section.settings.sorting_price %}<option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>{% endif %}
+    {% if section.settings.sorting_date %}<option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>{% endif %}
+    {% if section.settings.sorting_date %}<option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>{% endif %}
+  </select>
+  <input type="hidden" data-sort-by-default value="{{ collection.sort_by | default: collection.default_sort_by }}">
+</div>

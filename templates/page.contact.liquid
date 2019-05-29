@@ -1,0 +1,18 @@
+{% include 'xtra-content-capture' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-page' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'page' %}
+{% endcapture %}
+
+{% capture template_content_contact %}
+  {% section 'module-contact-form' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-PAGE%%", xtra_content %}
+{% assign primary_template_content = primary_template_content | replace: "%%TEMPLATE-CONTENT-CONTACT%%", template_content_contact %}
+
+{{primary_template_content}}

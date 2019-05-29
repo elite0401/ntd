@@ -1,0 +1,309 @@
+{% assign current_year = 'now' | date: "%Y" %}
+
+{% if section.settings.newsletter %}
+  <div class="news-wrap">
+      {% include 'newsletter-form-display', newsletter_settings: section.settings %}
+  </div>
+{% endif %}
+
+
+
+  
+<footer class="site-footer">
+
+  <div class="row">
+    
+    {% if section.settings.footer_menu_1 != blank %}
+      <div class="small-12 large-expand columns">
+        <h3>{{linklists[section.settings.footer_menu_1].title}}</h3>
+          <ul class="no-bullets">
+  		      {% for link in linklists[section.settings.footer_menu_1].links %}
+                <li>
+                  <a href="{{link.url}}">{{link.title}}</a>
+                </li>
+           	{% endfor %}
+          </ul>
+      </div>
+    {% endif %}
+    
+    {% if section.settings.footer_menu_2 != blank %}
+    <div class="small-12 large-expand columns">
+      <h3>{{linklists[section.settings.footer_menu_2].title}}</h3>
+        <ul class="no-bullets">
+		{% for link in linklists[section.settings.footer_menu_2].links %}
+              <li>
+                <a href="{{link.url}}">{{link.title}}</a>
+              </li>
+         	{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    {% if section.settings.footer_menu_3 != blank %}
+    <div class="small-12 large-expand columns">
+      <h3>{{linklists[section.settings.footer_menu_3].title}}</h3>
+        <ul class="no-bullets">
+		{% for link in linklists[section.settings.footer_menu_3].links %}
+              <li>
+                <a href="{{link.url}}">{{link.title}}</a>
+              </li>
+         	{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if section.settings.footer_menu_4 != blank %}
+    <div class="small-12 large-expand columns">
+      <h3>{{linklists[section.settings.footer_menu_4].title}}</h3>
+        <ul class="no-bullets">
+		{% for link in linklists[section.settings.footer_menu_4].links %}
+              <li>
+                <a href="{{link.url}}">{{link.title}}</a>
+              </li>
+         	{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if section.settings.footer_menu_5 != blank %}
+    <div class="small-12 large-expand columns">
+      <h3>{{linklists[section.settings.footer_menu_5].title}}</h3>
+        <ul class="no-bullets">
+		{% for link in linklists[section.settings.footer_menu_5].links %}
+              <li>
+                <a href="{{link.url}}">{{link.title}}</a>
+              </li>
+         	{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    {% if section.settings.social_enable %} 
+    <div class="small-12 large-expand columns">
+      <h3>Sleep tips. Parent hacks. Deals.</h3>
+      <div class="klaviyo-form-J9a3hD"></div>
+        <ul class="no-bullets inline-list social-icons">
+          {% if settings.social_twitter_link != blank %}
+            <li>
+              <a target="_blank" href="{{ settings.social_twitter_link }}" title="{{ shop.name }} on Twitter">
+                <span class="fa fa-twitter"></span>
+                <span class="icon-fallback-text show">Twitter</span>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.social_facebook_link != blank %}
+            <li>
+              <a target="_blank" href="{{ settings.social_facebook_link }}" title="{{ shop.name }} on Facebook">
+                <span class="fa fa-facebook" aria-hidden="true"></span>
+                <span class="icon-fallback-text show">Facebook</span>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.social_instagram_link != blank %}
+            <li>
+              <a target="_blank" href="{{ settings.social_instagram_link }}" title="{{ shop.name }} on Instagram">
+                <span class="fa fa-instagram" aria-hidden="true"></span>
+                <span class="icon-fallback-text show">Instagram</span>
+              </a>
+            </li>
+         	{% endif %}
+          {% if settings.social_pinterest_link != blank %}
+            <li>
+              <a target="_blank" href="{{ settings.social_pinterest_link }}" title="{{ shop.name }} on Pinterest">
+                <span class="fa fa-pinterest" aria-hidden="true"></span>
+                <span class="icon-fallback-text show">Pinterest</span>
+              </a>
+            </li>
+          {% endif %}
+          {% if settings.social_youtube_link != blank %}
+            <li>
+              <a target="_blank" href="{{ settings.social_youtube_link }}" title="{{ shop.name }} on YouTube">
+                <span class="fa fa-youtube" aria-hidden="true"></span>
+                <span class="icon-fallback-text show">YouTube</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+  
+
+    </div>
+  {% endif %}
+  
+  
+  </div>
+  
+  {% if section.settings.show_payment_icons %}
+    {% unless shop.enabled_payment_types == empty %}
+      {%- assign payment_icons_available = 'amazon_payments,american_express,apple_pay,bitcoin,cirrus,dankort,diners_club,discover,dogecoin,dwolla,forbrugsforeningen,interac,jcb,litecoin,maestro,master,paypal,visa' | split: ',' -%}
+      <div class="row">
+        <div clas="columns">
+            <ul class="no-bullets inline-list payment-icons">
+              {% for type in shop.enabled_payment_types %}
+                {% if payment_icons_available contains type %}
+                  <li>
+                    {%- assign icon_name = type | prepend: 'icon-' -%}
+                    {% include icon_name %}
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
+    {% endunless %}
+  {% endif %}
+  <hr>
+  <div class="row">
+    
+    <div class="columns small-12 text-center small-text-left list-prod">
+      {% for link in linklists[section.settings.footer_footer_links].links %}
+        <p><a href="{{ link.url }}">{{ link.title }}</a></p>
+      {% endfor %}
+    </div>
+    
+    <div class="columns small-12 text-center list-prod">
+      {% for link in linklists[section.settings.footer_footer_links2].links %}
+        <p><a href="{{ link.url }}">{{ link.title }}</a></p>
+      {% endfor %}
+    </div>
+    
+    {% if section.settings.footer_branding_link != blank or section.settings.footer_branding_text != blank %}
+    <div class="columns small-12 text-center branding-link">
+      <p><a href="{{section.settings.footer_branding_link}}">{{section.settings.footer_branding_text}}</a></p>
+    </div>
+    {% endif %}
+    
+  </div>
+      
+</footer>
+
+{% for block in section.blocks %}
+  {% if block.type == "footer_script" %}
+    <!-- Footer Script: {{block.settings.title}} -->
+    {{block.settings.script}}
+  {% endif %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "social_enable",
+      "label": "Show social media icons"
+    }, 	
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter",
+      "label": "Show newsletter form"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter promo text"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text_classes",
+      "label": "Promo Area Classes",
+      "default": "small-12 large-expand medium-expand large-text-right small-text-center"
+    },
+    {
+      "type": "html",
+      "id": "newsletter_embed",
+      "label": "Third party embed code"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_embed_classes",
+      "label": "Embed Area Classes",
+      "default": "small-12 large-expand medium-expand small-only-text-center"
+    },
+	  {
+      "type": "header",
+      "content": "Menus"
+    },
+	  {
+      "type": "link_list",
+      "id": "footer_menu_1",
+      "label": "Menu 1"
+    },
+	  {
+      "type": "link_list",
+      "id": "footer_menu_2",
+      "label": "Menu 2"
+    },
+	  {
+      "type": "link_list",
+      "id": "footer_menu_3",
+      "label": "Menu 3"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_4",
+      "label": "Menu 4"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_5",
+      "label": "Menu 5"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_footer_links",
+      "label": "Bottom Footer Links"
+    },
+	  {
+      "type": "link_list",
+      "id": "footer_footer_links2",
+      "label": "Second Set of Bottom Footer Links"
+    },
+	  {
+      "type": "textarea",
+      "id": "footer_branding_text",
+      "label": "Branding Content"
+    },
+	  {
+      "type": "url",
+      "id": "footer_branding_link",
+      "label": "Branding Link"
+    }
+  ],
+  "blocks":
+  [
+    {
+      "type": "footer_script",
+      "name": "Footer Script",
+      "settings":
+      [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Block Label",
+            "info": "An internal label to keep track of this content block."
+        },
+        {
+            "type": "textarea",
+            "id": "script",
+            "label": "Script Code",
+            "placeholder": "<script>....."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

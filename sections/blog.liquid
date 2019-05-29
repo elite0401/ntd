@@ -1,0 +1,264 @@
+{% assign blog_img = blank %}
+{% if section.settings.blog_img != blank %}
+  {% assign blog_img = section.settings.blog_img %}
+{% endif %}
+{% for block in section.blocks %}
+	{% if block.type == "blog_header" and block.settings.blog == blog.handle and block.settings.blog_img != blank %}
+		{% assign blog_img = block.settings.blog_img %}
+		{% break %}
+	{% endif %}
+{% endfor %}
+
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "BLOG" %}
+{% endif %}
+{% for block in section.blocks %}
+  {% if block.type == "blog_xtra" and block.settings.blog == blog.handle %}
+    {% assign xtra_num = block.settings.xtra_num %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if blog_img != blank %}style="background-image: url({%- include 'image-src', image_src: blog_img, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title_img %}<h1>{{ blog.title }}</h1>{% endif %}
+</div>
+
+{% unless section.settings.display_title_img %}
+  <div class="large-12 small-12 columns text-center">
+    <h1>{{blog.title}}</h1>
+  </div>
+{% endunless %}
+
+{% paginate blog.articles by 9 %}
+<div class="row" data-section-id="{{ section.id }}" data-section-type="blog">
+
+    {% include 'breadcrumbs' %}
+
+    {% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+        <div class="{{section.settings.xtra_classes}} columns">
+          %%XTRA-{{xtra_num}}%%
+        </div>
+    {% endif %}
+
+    <div class="row blog-container">
+        
+        <div class="small-12 columns">
+            {%- assign blog_title = blog.title -%}
+            {% if current_tags %}
+                {% capture blog_title %}{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}{% endcapture %}
+            {% endif %}
+        </div>
+    
+        {% for article in blog.articles %}
+        <div class="small-12 medium-4 large-4 blog-contain">
+            <div class="small-12">
+                {% if article.image %}
+                  <a href="{{ article.url }}">
+                    {% include 'image-tag',
+                      image_tag_src : article.image,
+                      image_tag_alt: article.title
+                      image_tag_sizing: "2048x" %}
+                  </a>
+                {% endif %}
+        
+                
+            </div>
+        
+            <div class="small-12 columns">
+            <h2>
+                  <a href="{{ article.url }}">{{ article.title }}</a>
+                </h2>
+        
+                {% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+        
+                <p class="blog-meta hide">
+                    <i class="fa fa-calendar"></i><span> {{ article.published_at | time_tag: format: 'month_day_year' }}</span>
+                    <i class="fa fa-user"></i><span> {{ article.author }}</span>
+                </p>
+                {% if blog.comments_enabled? or article.tags.size > 0 %}
+                    <ul class="no-bullets hide blog-tags">
+                        {% if blog.comments_enabled? %}
+                            <li>
+                                <a href="{{ article.url }}#comments">
+                                    {{ 'blogs.comments.with_count' | t: count: article.comments_count }}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if article.tags.size > 0 %}
+                            <div class="inline"><i class="fa fa-tags"> </i><span>Tags: </span></div>
+                            {% for tag in article.tags %}
+                                <li>
+                                    <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
+                                    {% unless forloop.last %} {% endunless %}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        
+            <div class="small-12 columns">
+                <div class="rte">
+                  {% if article.excerpt.size > 0 %}
+                    {{ article.excerpt }}
+                  {% else %}
+                    <p>
+                      {{ article.content | strip_html | truncatewords: 40 }}
+                    </p>
+                  {% endif %}
+                </div>
+            </div>
+            
+            <div class="small-12 columns text-center hide">
+                <p>
+                  <a class="button" href="{{ article.url }}">{{ 'blogs.article.read_more' | t }}</a>
+                </p>
+            </div>
+            </div>
+        {% endfor %}
+    
+        <div class="small-12 columns">
+          {% if paginate.pages > 1 %}
+            {% include 'pagination' %}
+          {% endif %}
+        </div>
+    </div>
+    
+    
+    {% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+        <div class="{{section.settings.xtra_classes}} columns">
+          %%XTRA-{{xtra_num}}%%
+        </div>
+    {% endif %}
+  
+</div>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Blog Page Settings",
+    "settings": [	         
+      {
+        "type": "image_picker",
+        "id": "blog_img",
+        "label": "Default Blog Header",
+        "info": "This image will show up as the header image for all blogs"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display Title On Header Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Area Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [	
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "blog_canvas_classes",
+        "label": "Blog Area Classes",
+        "default": "small-12 medium-9 large-9"
+      }
+	],
+	"blocks":[
+	    {
+		    "type": "blog_header",
+			"name": "Blog Header Image",
+			"settings":[    		        
+	        	{
+              "type": "text",
+              "id": "title",
+    		      "label": "Block Label"
+            },
+	        	{
+		          "type": "blog",
+		          "id": "blog",
+				  "label": "The blog to have this header"
+		        },
+		        {
+		          "type": "image_picker",
+		          "id": "blog_img",
+				  "label": "The header image to use"
+		        }
+			]
+		},
+		{
+      "type": "blog_xtra",
+      "name": "Blog Specific Xtra",
+      "settings":
+      [
+        {
+          "type": "text",
+          "id": "title",
+		      "label": "Block Label"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Choose Blog"
+        },
+        {
+          "type": "select",
+          "id": "xtra_num",
+          "label": "Choose Xtra",
+          "default": "0",
+          "options": [	
+            {
+            "value": "0",
+            "label": "No Xtra"
+            },
+            {
+            "value": "1",
+            "label": "Xtra 1"
+            },
+            {
+            "value": "2",
+            "label": "Xtra 2"
+            },
+            {
+            "value": "3",
+            "label": "Xtra 3"
+            }
+          ]
+        }
+      ]
+    }
+	]
+}
+{% endschema %}

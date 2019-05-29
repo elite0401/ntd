@@ -1,0 +1,17 @@
+{% if content_transform %}
+    {% assign long_content = content_transform %}
+{% else %}
+    {% assign long_content = "" %}
+
+    {% if template contains "product" %}
+        {% assign long_content = product.description %}
+    {% elsif template contains "article" %}
+        {% assign long_content = article.content %}
+    {% elsif template contains "page" %}
+        {% assign long_content = page.content %}
+    {% elsif template contains "collection" %}
+        {% assign long_content = collection.description %}
+    {% endif %}
+{% endif %}
+
+{% assign long_content = long_content | split: "<!--*SEP*-->" %}

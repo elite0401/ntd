@@ -1,0 +1,96 @@
+<!-- Only Customer Specific JS code here -->
+(function() {
+
+  <!-- Mega Menu + Promo-bar Fix -->
+  if($(".promo").length > 0) {
+      $(".mega-menu-container").addClass("with-promo");
+  }
+
+  <!-- Swatch Value UI Updates -->
+  let colorValue = $('#SingleOptionSelector-0 option:selected').val();
+  let sizeValue = $('#SingleOptionSelector-1 option:selected').val();
+
+  $('[data-option-selector="0"]').text(colorValue);
+  $('[data-option-selector="1"]').text(sizeValue);
+
+  <!-- Sticky Back to Top Button on product page -->
+  if($('.back-to-top').length > 0) {
+     var offset = 650;
+     var duration = 500;
+     $(window).scroll(function() {
+       if ($(this).scrollTop() > offset) {
+         $('.back-to-top').fadeIn(duration);
+       }
+       else {
+         $('.back-to-top').fadeOut(duration);
+       }
+     });
+     $('.back-to-top').unbind('click.smoothscroll').bind('click', function(e) {
+       e.preventDefault();
+       $('html, body').animate( { scrollTop: 0 }, duration);
+       return false;
+     })
+  }
+
+  <!-- Scrolling header functionality on mobile -->
+  if($(window).width() < 770) {
+      // Hide Header on on scroll down
+      var didScroll;
+      var lastScrollTop = 0;
+      var delta = 5;
+      var navbarHeight = $('header').outerHeight();
+
+      $(window).scroll(function(event){
+          didScroll = true;
+      });
+
+      setInterval(function() {
+          if (didScroll) {
+              hasScrolled();
+              didScroll = false;
+          }
+      }, 250);
+
+      function hasScrolled() {
+          var st = $(this).scrollTop();
+
+          // Make sure they scroll more than delta
+          if(Math.abs(lastScrollTop - st) <= delta)
+              return;
+
+          if (st > lastScrollTop && st > navbarHeight){
+              $('#shopify-section-header').slideUp(400);
+          } else {
+              if(st + $(window).height() < $(document).height()) {
+                  $('#shopify-section-header').slideDown(400);
+              }
+          }
+
+          lastScrollTop = st;
+      }
+  }
+
+  <!-- Gift Wrap in Cart Checkbox Initial State -->
+    if(localStorage.getItem('gift-wrapping') == 'checked') {
+        $('#gift-wrapping').prop('checked', true);
+    } else {
+        $('#gift-wrapping').prop('checked', false);
+    }
+
+    $('.search-toggle').click(function () {
+      $('.mob-search').toggleClass("show-me");
+    });
+
+    <!-- Collection Dropdown Links -->
+    $('#collectionSorting').on('change', function (event) {
+       location.href = event.target.value;
+    });
+
+    <!-- Scroll Reveal -->
+    window.sr = ScrollReveal({ reset: true });
+
+    sr.reveal('.fade-1', { duration: 800 });
+    sr.reveal('.fade-2', { duration: 800 });
+    sr.reveal('.fade-3', { duration: 800 });
+
+})();

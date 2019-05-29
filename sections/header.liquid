@@ -1,0 +1,263 @@
+<header>
+  <div class="utility-bar">
+    <div class="wrapper">
+      <div class="row align-justify">
+        <div class="columns small-12 large-expand medium-expand text-center small-only-text-center">
+          <div class="utility-left">
+            {% if section.settings.promo != "" %}
+                <div class="promo text-{{section.settings.promo_align}}">{{section.settings.promo}}</div>
+            {% endif %}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="title-bar row align-justify" data-responsive-toggle="mobile-menu" data-hide-for="large">
+  <a href="/" itemprop="url" class="site-logo{% if section.settings.logo_mobile != blank %} site-header__logo-image{% endif %}">
+          {% if section.settings.logo_mobile != blank %}
+            {% include 'image-tag',
+              image_tag_src : section.settings.logo_mobile
+              image_tag_alt: section.settings.logo_alt_mobile | default: shop.name,
+              image_tag_itemprop: "logo" %}
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+        </a>
+    <div class="columns no-padding">
+      <ul class="mobile-nav-icons left">
+        <li><button class="menu-toggle" type="button" data-toggle="menu-drawer"><i class="fa fa-bars"></i></button></li>
+        {% if section.settings.display_search %}
+          <li class="mobile-search-btn">
+            <a class="search-toggle">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="columns no-padding text-center">
+      <div class="title-bar-title" itemscope itemtype="http://schema.org/Brand">
+        
+      </div>
+    </div>
+    <div class="columns">
+      <ul class="mobile-nav-icons right">
+        <li>
+          {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+              <a href="/account" class="site-header__account">
+                <i class="fa fa-user"></i>
+                <span class="icon__fallback-text"></span>
+              </a>
+            {% else %}
+              <a href="/account/login" class="site-header__account">
+                <i class="fa fa-user"></i>
+                <span class="icon__fallback-text"></span>
+              </a>
+            {% endif %}
+          {% endif %}
+        </li>
+        {% if section.settings.display_cart %}
+          <li class="mobile-cart-btn">
+            <a href="/cart" class="cart-toggle cart-btn">
+              <i class="fa fa-shopping-cart"></i><span class="cart-num CartCount">{{ cart.item_count }}</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    
+  </div>
+  
+  {% if section.settings.display_search %}
+    <div class="mob-search">
+              <form action="/search" method="get" role="search">
+                <label for="Search" class="label-hidden">
+                  {{ 'general.search.placeholder' | t }}
+                </label>
+                <input class="search-input" type="search" name="q" id="Search" value="{{ search.terms | escape }}" placeholder="Search">
+                <button type="submit" class="btn search-btn">
+                  <i class="fa fa-search"></i>
+                  <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+                </button>
+              </form>
+              </div>
+            {% endif %}
+            
+  <div class="top-bar-bg" id="mobile-menu">
+  <div class="cn-wide">
+    
+    {% if section.settings.main_linklist != blank and linklists[section.settings.main_linklist].links.size > 0 %}
+      <div class="navigation text-center">
+        <div class="flexible-div">
+        <div class="logo-container text-center" itemscope itemtype="http://schema.org/Brand">
+      <a href="/" itemprop="url" class="site-logo{% if section.settings.logo != blank %} site-header__logo-image{% endif %}">
+        {% if section.settings.logo != blank %}
+          {% include 'image-tag',
+            image_tag_src : section.settings.logo
+            image_tag_alt: section.settings.logo_alt | default: shop.name,
+            image_tag_itemprop: "logo" %}
+        {% else %}
+          {{ shop.name }}
+        {% endif %}
+      </a>
+    </div>
+          <ul class="parent-nav nav-list dropdown menu" data-dropdown-menu data-options="closeOnClick:true; closingTime: 5;hoverDelay: 5;hover: true; hoverPane: true;">
+            {% for link in linklists[section.settings.main_linklist].links %}
+              <li data-parent="{{ link.title | handleize }}">
+                {% if link.levels == 0 %}
+                  <a class="nav-link" href="{{link.url}}">{{link.title}}</a>
+                {% else %}
+                  <a class="nav-link nav-link-toggle" href="{{link.url}}">{{link.title}}</a>
+                  <ul class="menu dom-style-remove" style="display:none;">
+                    {% for link2 in link.links %}
+                      {% if link2.levels == 0 %}
+                        <li><a class="nav-link" href="{{link2.url}}">{{link2.title}}</a></li>
+                      {% else %}
+                        <li>
+                          <a class="nav-link nav-link-toggle" href="{{link2.url}}">{{link2.title}}</a>
+                          <ul class="menu">
+                            {% for link3 in link2.links %}
+                              <li><a class="nav-link" href="{{link3.url}}">{{link3.title}}</a></li>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+            </ul>
+            <ul class="main-nav-icons no-bullets">
+              
+            <li>
+            {% if section.settings.display_search %}
+              <form action="/search" method="get" role="search">
+                <label for="Search" class="label-hidden">
+                  {{ 'general.search.placeholder' | t }}
+                </label>
+                <input class="search-input" type="search" name="q" id="Search" value="{{ search.terms | escape }}" placeholder="Search">
+                <button type="submit" class="btn search-btn">
+                  <i class="fa fa-search"></i>
+                  <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+                </button>
+              </form>
+            {% endif %}
+            </li>
+              {% if shop.customer_accounts_enabled %}
+                {% if customer %}
+                  <li class="">
+                    <a href="/account"><i class="fa fa-user"></i></a>
+                  </li>
+                  {% comment %}
+                  <li class="">
+                    {{ 'layout.customer.log_out' | t | customer_logout_link }}
+                  </li>
+                  {% endcomment %}
+                {% else %}
+                  <li class="">
+                    <a href="/account/login"><i class="fa fa-user"></i></a>
+                  </li>
+                {% endif %}
+              {% endif %}
+              {% if section.settings.display_cart %}
+                <li class=""><a href="/cart" class="cart-toggle cart-btn"><i class="fa fa-shopping-cart"></i><span class="cart-num CartCount">{{ cart.item_count }}</span></a></li>
+              {% endif %}
+            </ul>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  
+  </div>
+</header>
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Desktop Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "text",
+        "id": "logo_alt",
+        "label": "Logo Alt Text"
+      },
+      {
+        "type": "header",
+        "content": "Mobile/Tablet Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_mobile",
+        "label": "Logo image"
+      },
+      {
+        "type": "text",
+        "id": "logo_alt_mobile",
+        "label": "Logo Alt Text"
+      },
+      {
+        "type": "header",
+        "content": "Display Settings"
+      },
+      {
+        "type": "link_list",
+        "id": "top_bar_list",
+        "label": "Top Bar List"
+      },
+      {
+        "type": "textarea",
+        "id": "promo",
+        "label": "Promotion Message"
+      },
+      {
+        "type": "select",
+        "id": "promo_align",
+        "label": "Text Alignment",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "display_cart",
+        "label": "Display Cart",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_search",
+        "label": "Display Search",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "main_linklist",
+        "label": "Menu",
+        "default": "main-menu"
+      }
+    ]
+  }
+{% endschema %}

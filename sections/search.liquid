@@ -1,0 +1,192 @@
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "SEARCH" %}
+{% endif %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if section.settings.header_img != blank %}style="background-image: url({%- include 'image-src', image_src: section.settings.header_img, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title_img %}<h1>{{ section.settings.header_text }}</h1>{% endif %}
+</div>
+
+{% unless section.settings.display_title_img %}
+  <div class="large-12 small-12 columns text-center">
+    <h1>{{section.settings.header_text}}</h1>
+  </div>
+{% endunless %}
+
+{% paginate search.results by 12 %}
+<div class="row" data-section-id="{{ section.id }}" data-section-type="search">
+
+    {% include 'breadcrumbs' %}
+    
+    {% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+        <div class="{{section.settings.xtra_classes}} columns">
+            %%XTRA-{{xtra_num}}%%
+        </div>
+    {% endif %}
+
+    <div class="small-12 {{section.settings.search_canvas_classes}} columms text-center">
+    
+        <div class="row">
+          <div class="small-12 columns">
+              <h1>
+                  {% if search.performed %}
+                      {% if search.results_count == 0 %}
+                          {{ 'general.search.no_results_html' | t: terms: search.terms }}
+                      {% else %}
+                          {{ 'general.search.results_for_html' | t: terms: search.terms }}
+                      {% endif %}
+                  {% else %}
+                      {{ 'general.search.title' | t }}
+                  {% endif %}
+              </h1>
+          </div>
+          <div class="small-12 columns text-center">
+              <form class="search-form" action="/search" method="get" role="search">
+                  <label for="Search" class="label-hidden">{{ 'general.search.placeholder' | t }}</label>
+                  <input type="search" name="q" id="Search" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}">
+                  {% if section.settings.products_only %}
+                      <input type="hidden" name="type" value="product">
+                  {% endif %}
+                  <button type="submit" class="btn">
+                    <i class="flaticon-search"></i>
+                    <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+                  </button>
+              </form>
+          </div>
+        </div>
+        <div class="row">
+          {% if search.performed %}
+              {% for item in search.results %}
+                  {% if item.object_type == 'product' %}
+                      {% assign grid_product = item %}
+                      {% include 'product-grid-item', quick_view: section.settings.quick_view, grid_item_classes: section.settings.grid_item_classes %}
+                  {% else %}                
+                      <div class="{{section.settings.grid_item_classes}} columns product-grid-item">
+                          {% if item.featured_image %}
+                              <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
+                                  {% include 'image-tag',
+                                    image_tag_src : item.featured_image,
+                                    image_tag_alt: item.featured_image.alt
+                                    image_tag_sizing: '240x240',
+                                    image_tag_classes: 'lazyload' %}
+                              </a>
+                          {% endif %}
+  
+                          <p>{{ item.title | link_to: item.url }}</p>
+                          <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
+                      </div>
+                  {% endif %}
+              {% endfor %}
+  
+              <div class="small-12 columns text-center">
+                  {% if paginate.pages > 1 %}
+                      {% include 'pagination' %}
+                  {% endif %}
+              </div>
+          {% endif %}
+        </div>
+    </div>
+
+    {% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+        <div class="{{section.settings.xtra_classes}} columns">
+            %%XTRA-{{xtra_num}}%%
+        </div>
+    {% endif %}
+</div>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Search Page Settings",
+    "settings": [	         
+      {
+        "type": "header",
+        "content": "Header Options"
+      },
+      {
+        "type": "text",
+        "id": "header_text",
+        "label": "Search Header Text",
+        "default": "Search"
+      },
+      {
+        "type": "image_picker",
+        "id": "header_img",
+        "label": "Search Header Image",
+        "info": "This image will show up as the header image for the search results page"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display Title On Header Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Search Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view",
+        "label": "Enable Quickview",
+        "default": false,
+        "info": "Only for product search results"
+      },
+      {
+        "type": "checkbox",
+        "id": "products_only",
+        "label": "Only Search Products"
+      },
+      {
+        "type": "textarea",
+        "id": "grid_item_classes",
+        "label": "Grid Item Classes",
+        "default": "small-6 medium-3 large-4"
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [	
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "search_canvas_classes",
+        "label": "Search Area Classes",
+        "default": "small-12 medium-9 large-9"
+      }
+	]
+}
+{% endschema %}

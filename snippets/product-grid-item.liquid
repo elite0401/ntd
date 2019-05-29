@@ -1,0 +1,139 @@
+{% comment %} SpeedBoostr_2019 {% endcomment %}
+{% unless grid_item_image_size %}
+    {% assign grid_item_image_size = "1024x" %}
+{% endunless %}
+{% unless grid_item_loop_index %}
+    {% assign grid_item_loop_index = 0 %}
+{% endunless %}
+{% unless grid_item_add2cart %}
+    {% assign grid_item_add2cart = false %}
+{% endunless %}
+
+{% if column_flex %}
+<div class="small-6 large-expand columns product-grid-item" data-handle="{{grid_product.handle}}" data-product-id="{{grid_product.id}}">
+{% elsif slider %}
+<div>
+{% elsif grid_item_classes %}
+<div class="{{grid_item_classes}} columns product-grid-item" data-handle="{{grid_product.handle}}" data-product-id="{{grid_product.id}}">
+{% else %}
+<div class="small-6 large-4 columns product-grid-item" data-handle="{{grid_product.handle}}" data-product-id="{{grid_product.id}}">
+{% endif %}
+<div class="prod-container">
+
+<div class="prod-thumb">
+{% assign grid_item_data = grid_product %}
+{% assign grid_item_img = grid_product.featured_image %}
+{% assign grid_item_title = grid_product.title %}
+{% if grid_variant %}
+    {% assign grid_item_data = grid_variant %}
+    {% if grid_variant.image %}
+        {% assign grid_item_img = grid_variant.featured_image %}
+    {% endif %}
+    {% if grid_variant.title != "Default" %}
+        {% assign grid_item_title = grid_item_title | append: " &mdash; " | append: grid_variant.title %}
+    {% endif %}
+{% endif %}
+{% if grid_item_loop_index > 6 %}
+    {% assign grid_item_image_classes = "lazyload" %}
+{% else %}
+    {% assign grid_item_image_classes = "lazyload" %}
+{% endif %}
+
+    {% include 'product-badge', badge_product: grid_product %}
+    
+    {% comment %}THIS IS A TEST PRODUCT
+    <a class="prod-img" href="/products/test-product321">
+        <img src="https://cdn.shopify.com/s/files/1/0882/5016/products/Mouse_Product_1024x1024_72dpi_3_2048x.progressive.jpg?v=1519338757">
+        <img class="sec-img" src="https://cdn.shopify.com/s/files/1/0882/5016/products/Pelican_2ndary_b0b4e3f9-1aae-4fbb-af50-d8b088467c1d_2048x.progressive.jpg?v=1518555540">
+    </a>
+    {% endcomment %}
+    
+    <a class="prod-img" href="{{ grid_product.url | within: collection }}{% if grid_variant %}?variant_id={{grid_variant.id}}{% endif %}">
+        {% include 'image-tag',
+            image_tag_src : grid_item_img,
+            image_tag_alt: grid_item_img.alt
+            image_tag_sizing: grid_item_image_size,
+            image_tag_classes: grid_item_image_classes %}
+        <img class="sec-img lazyload" data-src="{{ grid_product.images[1] | img_url: "2048x"}}" />
+    </a>
+    
+    </div>
+    
+    <div class="prod-info">
+    <a class="prod-name" href="{{ grid_product.url | within: collection }}{% if grid_variant %}?variant_id={{grid_variant.id}}{% endif %}">{{ grid_item_title }}</a>
+    <p class="prod-price">
+        {% if grid_item_data.compare_at_price > grid_item_data.price %}
+            {% if grid_product.price_varies %}
+                {%- capture sale_price %}<span class="{% unless grid_prduct.tags contains "price-static" %}price-display{% endunless %}">{{ grid_item_data.price | money}}</span>{% endcapture %}
+                {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+            {% else %}
+                {{ 'products.product.on_sale' | t }}
+                <span class="{% unless grid_product.tags contains "price-static" %}price-display{% endunless %}">{{ grid_item_data.price | money }}</span>
+            {% endif %}
+        {% else %}
+            {% if grid_product.price_varies %}
+                {%- capture price %}<span class="{% unless grid_product.tags contains "price-static" %}price-display{% endunless %}">{{ grid_item_data.price | money}}</span>{% endcapture %}
+                {{ 'products.product.from_text_html' | t: price: price }}
+            {% else %}
+                <span class="{% unless grid_product.tags contains "price-static" %}price-display{% endunless %}">{{ grid_item_data.price | money }}</span>
+            {% endif %}
+        {% endif %}
+        {% if grid_item_data.compare_at_price > grid_item_data.price %}
+            <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+            <s class="{% unless grid_product.tags contains "price-static" %}price-display{% endunless %}">{{ grid_item_data.compare_at_price | money }}</s>
+        {% endif %}
+        {% unless grid_item_data.available %} {{ 'products.product.sold_out' | t }} {% endunless %}
+    </p>
+    {% if grid_item_add2cart %}
+        <div class="product-grid-item-form" data-add2cart-container>
+        
+            {% comment %}special input field to be populated by pricing rules{% endcomment %}
+            <input type="hidden" class="pr-property-{{grid_product.id}}" id="pr-property-{{grid_product.id}}" name="properties[_pr_{{grid_product.id}}]" disabled>
+
+            {% if grid_variant %}
+                <input type="hidden" name="id" value="{{ grid_variant.id }}">
+            {% elsif grid_product.available and grid_product.variants.size > 1 and product.options.first != 'Title' and product.variants.first.title != 'Default Title' %}
+                <select name="id" class="{% if section.settings.display_swatches %}hide{% endif %}" data-option-selector>
+                    {% for grid_product_variant in grid_product.variants %}
+                        <option value="{{grid_product_variant.id}}" data-option1="{{ grid_product_variant.option1 | escape }}" data-option2="{{ grid_product_variant.option2 | escape }}" data-option3="{{ grid_product_variant.option3 | escape }}">{{grid_product_variant.title}}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input type="hidden" name="id" value="{{ grid_product.variants.first.id }}">
+            {% endif %}
+          
+          <div class="mobile-only">
+          <div class="loox-rating" data-id="{{ grid_product.id }}" data-rating="{{ grid_product.metafields.loox.avg_rating }}" data-raters="{{ grid_product.metafields.loox.num_reviews }}"></div>
+          <p class="mobile-soft-description">{{ grid_product.metafields.nestedData.softDescription }}</p>
+          </div>
+          
+          <div class="hide-on-mobile">  
+            {% if section.settings.display_swatches %}
+              {% include 'collection-swatches' %}
+            {% endif %}
+            
+            <button data-add2cart class="button primary smaller" type="submit" name="add" data-loading-text="{{ 'products.product.add_to_cart_loading' | t }}" {% if grid_variant and grid_variant.available %}{% elsif grid_product.available %}{% else %}disabled="disabled"{% endif %} data-ajax>
+                <span data-add-to-cart-text>
+                {% if grid_variant and grid_variant.available %}
+                {{ 'products.product.add_to_cart' | t }}
+                {% elsif grid_product.available %}
+                {{ 'products.product.add_to_cart' | t }}
+                {% else %}
+                {{ 'products.product.sold_out' | t }}
+                {% endif %}
+                </span>
+            </button>
+            
+            </div>
+        </div>
+    {% endif %}
+    {% if quick_view %}
+        <div class="text-center product-qv-wrapper">
+            <br>
+            <a href="#" class="product-quick-view button outline full" data-handle="{{grid_product.handle}}" data-variant="{{grid_variant.id}}">Quick View</a>
+        </div>
+    {% endif %}
+    
+    </div>
+    </div>
+</div>

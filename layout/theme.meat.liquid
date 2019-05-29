@@ -1,0 +1,18 @@
+<!doctype html>
+<!--[if IE 9]> <html class="ie9 no-js supports-no-cookies" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js supports-no-cookies" lang="{{ shop.locale }}"> <!--<![endif]-->
+<head>
+  {% include 'site-head' %}
+  {{ content_for_header }}
+  {% include 'header-scripts' %}
+</head>
+
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }}">
+
+  {% include 'page-handle' %}
+  <main id="MainContent" class="{{ template.name | handle }}-{{page_handle}}">
+    {{ content_for_layout }}
+  </main>
+  {% include 'footer-scripts' %}
+</body>
+</html>

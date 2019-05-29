@@ -1,0 +1,81 @@
+{% if enable_breadcrumbs or section.settings.enable_breadcrumbs %}
+    <div class="columns small-12">
+        <nav aria-label="You are here:" role="navigation" class="nav-breadcrumbs">
+          <ul class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="/" title="{{ shop.name | escape }}"><span itemprop="name">Home</span></a></li>
+            
+            {% if template.name == "article" %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{blog.url}}" title="{{ blog.title | escape }}"><span itemprop="name">{{blog.title}}</span></a></li>
+                <li><span class="show-for-sr">Current: </span> {{article.title}}</li>
+            {% elsif template.name == "blog" %}
+                {% if current_tags.size > 0 %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{blog.url}}" title="{{ blog.title | escape }}"><span itemprop="name">{{blog.title}}</span></a></li>
+                    <li>
+                        <span class="show-for-sr">Current: </span>
+                        {{ current_tags | join: " + " }}
+                    </li>
+                {% else %}
+                    <li><span class="show-for-sr">Current: </span> {{blog.title}}</li>
+                {% endif %}
+            {% elsif template.name == "collection" %}
+                {% assign collection_crumb = empty %}
+                {% assign collection_pre = empty %}
+                {% assign collection_pre_pre = empty %}
+                {% if section.settings.breadcrumbs_search_list %}
+                    {% include 'breadcrumb-collection-collection' %}
+                {% else %}
+                    {% assign collection_crumb = collection %}
+                {% endif %}
+                {% if collection_pre_pre != empty %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_pre_pre.url}}" title="{{ collection_pre_pre.title | escape }}"><span itemprop="name">{{collection_pre_pre.title}}</span></a></li>
+                {% endif %}
+                {% if collection_pre != empty %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_pre.url}}" title="{{ collection_pre.title | escape }}"><span itemprop="name">{{collection_pre.title}}</span></a></li>
+                {% endif %}
+                {% if current_tags.size > 0 %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_crumb.url}}" title="{{ collection_crumb.title | escape }}"><span itemprop="name">{{collection_crumb.title}}</span></a></li>
+                    <li>
+                        <span class="show-for-sr">Current: </span>
+                        {{ current_tags | join: " + " }}
+                    </li>
+                {% else %}
+                    <li><span class="show-for-sr">Current: </span> {{collection_crumb.title}}</li>
+                {% endif %}
+            {% elsif template.name == "page" %}
+                <li><span class="show-for-sr">Current: </span> {{page.title}}</li>
+            {% elsif template.name == "product" %}
+                {% assign collection_crumb = empty %}
+                {% assign collection_pre = empty %}
+                {% assign collection_pre_pre = empty %}
+                {% if section.settings.breadcrumbs_search_list %}
+                    {% include 'breadcrumb-product-collection' %}
+                {% endif %}
+                {% if collection_crumb != empty %}
+                    {% if collection_pre_pre != empty %}
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_pre_pre.url}}" title="{{ collection_pre_pre.title | escape }}"><span itemprop="name">{{collection_pre_pre.title}}</span></a></li>
+                    {% endif %}
+                    {% if collection_pre != empty %}
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_pre.url}}" title="{{ collection_pre.title | escape }}"><span itemprop="name">{{collection_pre.title}}</span></a></li>
+                    {% endif %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection_crumb.url}}" title="{{ collection_crumb.title | escape }}"><span itemprop="name">{{collection_crumb.title}}</span></a></li>
+                {% elsif collection %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{collection.url}}" title="{{ collection.title | escape }}"><span itemprop="name">{{collection.title}}</span></a></li>
+                {% elsif section.settings.breadcrumbs_all_products %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="/collections/all" title="Products"><span itemprop="name">Products</span></a></li>
+                {% endif %}
+                <li><span class="show-for-sr">Current: </span> {{product.title}}</li>
+            {% elsif template.name == "search" %}
+                {% if search.terms.size > 0 %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="/search" title="Search"><span itemprop="name">Search</span></a></li>
+                    <li><span class="show-for-sr">Current: </span> "{{search.terms}}"</li>
+                {% else %}
+                    <li><span class="show-for-sr">Current: </span> Search</li>
+                {% endif %}
+            {% elsif template.name == "list-collections" %}
+                <li><span class="show-for-sr">Current: </span> Shop</li>
+            {% endif %}
+            
+          </ul>
+        </nav>
+    </div>
+{% endif %}

@@ -1,0 +1,13 @@
+{% include 'xtra-content-capture' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-search' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'search' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-SEARCH%%", xtra_content %}
+
+{{primary_template_content}}

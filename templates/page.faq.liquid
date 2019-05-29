@@ -1,0 +1,18 @@
+{% include 'xtra-content-capture' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-page' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'page' %}
+{% endcapture %}
+
+{% capture template_content_faq %}
+  {% section 'module-accordion-faq' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-PAGE%%", xtra_content %}
+{% assign primary_template_content = primary_template_content | replace: "%%TEMPLATE-CONTENT-FAQ%%", template_content_faq %}
+
+{{primary_template_content}}

@@ -1,0 +1,9 @@
+{% if settings.header_scripts != "" %}{{settings.header_scripts}}{% endif %}
+{% if settings.typography_scripts != "" %}{{settings.typography_scripts}}{% endif %}
+{% if settings.header_snippets_1 != blank %}{% include settings.header_snippets_1 %}{% endif %}
+{% if settings.header_snippets_2 != blank %}{% include settings.header_snippets_2 %}{% endif %}
+{% if settings.header_snippets_3 != blank %}{% include settings.header_snippets_3 %}{% endif %}
+{% if settings.header_snippets_4 != blank %}{% include settings.header_snippets_4 %}{% endif %}
+{% if settings.header_snippets_5 != blank %}{% include settings.header_snippets_5 %}{% endif %}
+{% include 'gs-scripts-header' %}
+{% include 'customer-scripts-header' %}

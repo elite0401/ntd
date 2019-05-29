@@ -1,0 +1,55 @@
+{% include 'content-transformations', content_transform: page.content %}
+{% assign page_img = blank %}
+{% if section.settings.page_img != blank %}
+  {% assign page_img = section.settings.page_img %}
+{% endif %}
+{% for block in section.blocks %}
+	{% if block.type == "page_header" and block.settings.page == page.handle and block.settings.page_img != blank %}
+		{% assign page_img = block.settings.page_img %}
+		{% break %}
+	{% endif %}
+{% endfor %}
+
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "PAGE" %}
+{% endif %}
+{% for block in section.blocks %}
+  {% if block.type == "page_xtra" and block.settings.page == page.handle %}
+    {% assign xtra_num = block.settings.xtra_num %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if page_img != blank %}style="background-image: url({%- include 'image-src', image_src: page_img, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title_img %}<h1>{{ page.title }}</h1>{% endif %}
+</div>
+
+{% unless section.settings.display_title_img %}
+  <div class="large-12 small-12 columns text-center">
+    <h1>{{page.title}}</h1>
+  </div>
+{% endunless %}
+
+<div class="row max-width" data-section-id="{{ section.id }}" data-section-type="page">
+
+  {% include 'breadcrumbs' %}
+  
+	{% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+    {% include 'content-transformations', content_transform: page.content %}
+  {% endif %}
+
+  <div class="small-12 {{section.settings.page_canvas_classes}} columns  page-container">
+
+    <div class="rte">
+      {{ page.content }}
+    </div>
+    
+  </div>
+  
+</div>
+
+

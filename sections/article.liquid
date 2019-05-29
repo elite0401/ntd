@@ -1,0 +1,318 @@
+{% include 'content-transformations', content_transform: article.content %}
+{%- assign number_of_comments = article.comments_count -%}
+{% if comment and comment.status != 'published' %}
+  {% assign number_of_comments = article.comments_count | plus: 1 %}
+{% endif %}
+
+{% assign article_img = blank %}
+{% if section.settings.article_img != blank %}
+  {% assign article_img = section.settings.article_img %}
+{% endif %}
+{% if article.image %}
+  {% assign article_img = article.image %}
+{% endif %}
+{% for block in section.blocks %}
+	{% if block.type == "article_header" and block.settings.article == article.handle and block.settings.article_img != blank %}
+		{% assign article_img = block.settings.article_img %}
+		{% break %}
+	{% endif %}
+{% endfor %}
+
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "ARTICLE" %}
+{% endif %}
+{% for block in section.blocks %}
+  {% if block.type == "article_xtra" and block.settings.article == article.handle %}
+    {% assign xtra_num = block.settings.xtra_num %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if article_img != blank %}style="background-image: url({%- include 'image-src', image_src: article_img, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title_img %}<h1>{{ article.title }}</h1>{% endif %}
+</div>
+
+{% unless section.settings.display_title_img %}
+  <div class="large-12 small-12 columns text-center">
+    <h1>{{article.title}}</h1>
+  </div>
+{% endunless %}
+
+<div class="row" data-section-id="{{ section.id }}" data-section-type="article">
+
+  {% include 'breadcrumbs' %}
+
+  {% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+    {% include 'content-transformations', content_transform: article.content %}
+  {% endif %}
+
+  <div class="small-12 {{section.settings.article_canvas_classes}} columns article-container">
+    <article role="article" itemscope itemtype="http://schema.org/Article">
+      {% if section.settings.image_above_content and article.image %}
+        {% include 'image-tag',
+            image_tag_src : article.image,
+            image_tag_alt: article.title
+            image_tag_sizing: "2048x" %}
+      {% endif %}
+      
+      {% if section.settings.display_title %}
+        <header role="banner">
+          <h1>{{ article.title }}</h1>
+        </header>
+      {% endif %}
+      
+      <div class="rte" itemprop="articleBody">
+        {{ article.content }}
+      </div>
+      
+      <p class="blog-meta">
+        <i class="fa fa-calendar"></i><span> {{ article.published_at | time_tag: format: 'month_day_year' }}</span>
+        <i class="fa fa-user"></i><span> {{ article.author }}</span>
+      </p>
+
+      {% if article.tags.size > 0 %}
+        <ul class="no-bullets blog-tags">
+          <div class="inline"><i class="fa fa-tags"> </i><span>Tags: </span></div>
+          {% for tag in article.tags %}
+            <li>
+              <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %} {% endunless %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      
+      {% if settings.social_sharing_blog %}
+        <h6 class="text-center">Share this</h6>
+        {% include 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+      {% endif %}
+      
+      {% if blog.comments_enabled? %}
+        <h3>{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
+        {% paginate article.comments by 5 %}
+
+          <div id="comments">
+            {% if comment and comment.status and paginate.current_page == 1 %}
+              <p class="form-success">
+                {% if blog.moderated? and comment.status != 'published' %}
+                  {{ 'blogs.comments.success_moderated' | t }}
+                {% else %}
+                  {{ 'blogs.comments.success' | t }}
+                {% endif %}
+              </p>
+            {% endif %}
+  
+            {% if number_of_comments > 0 %}
+              <ul>
+                {% comment %}
+                  Display comment from URL parameters if it is waiting moderation
+                {% endcomment %}
+                {% if comment and comment.status != 'published' %}
+                  <li id="{{ comment.id }}">
+                    <div class="rte">
+                      {{ comment.content }}
+                    </div>
+                    {% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                    <p>{{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}</p>
+                  </li>
+                {% endif %}
+                
+                {% for comment in article.comments %}
+                  <li id="{{ comment.id }}">
+                    <div class="rte">
+                      {{ comment.content }}
+                    </div>
+                    {% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                    <p>{{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}</p>
+                  </li>
+                {% endfor %}
+              </ul>
+            
+              {% if paginate.pages > 1 %}
+                {% include 'pagination' %}
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endpaginate %}
+        
+        {% form 'new_comment', article %}
+          <h3>{{ 'blogs.comments.title' | t }}</h3>
+          {{ form.errors | default_errors }}
+          
+          <label for="CommentAuthor" class="label-hidden">{{ 'blogs.comments.name' | t }}</label>
+          <input type="text" name="comment[author]" id="CommentAuthor" class="{% if form.errors contains 'author' %}input-error{% endif %}" placeholder="{{ 'blogs.comments.name' | t }}" value="{{ form.author }}" autocapitalize="words">
+          
+          <label for="CommentEmail" class="label-hidden">{{ 'blogs.comments.email' | t }}</label>
+          <input type="email" name="comment[email]" id="CommentEmail" class="{% if form.errors contains 'email' %}input-error{% endif %}" placeholder="{{ 'blogs.comments.email' | t }}" value="{{ form.email }}" spellcheck="false" autocomplete="off" autocapitalize="off">
+
+          <label for="CommentBody" class="label-hidden">{{ 'blogs.comments.message' | t }}</label>
+          <textarea name="comment[body]" id="CommentBody" class="{% if form.errors contains 'body' %}input-error{% endif %}" placeholder="{{ 'blogs.comments.message' | t }}">{{ form.body }}</textarea>
+          
+          {% if blog.moderated? %}
+            <p>{{ 'blogs.comments.moderated' | t }}</p>
+          {% endif %}
+          
+          <input type="submit" class="btn" value="{{ 'blogs.comments.post' | t }}">
+        {% endform %}
+      {% endif %}
+    </article>
+  </div>
+  
+  {% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+  {% endif %}
+  
+</div>
+
+{% schema %}
+  {
+    "name": "Article Page Settings",
+    "settings": [	         
+      {
+        "type": "image_picker",
+        "id": "article_img",
+        "label": "Default Article Header",
+        "info": "This image will show up as the header image for all articles"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display title on header image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title",
+        "label": "Display title within content",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "image_above_content",
+        "label": "Display article image above title",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [	
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "article_canvas_classes",
+        "label": "Article Area Classes",
+        "default": "small-12 medium-9 large-9"
+      }
+	],
+	"blocks":[
+	    {
+		    "type": "article_header",
+  			"name": "Article Header Image",
+  			"settings":[    		        
+	        	{
+              "type": "text",
+              "id": "title",
+    		      "label": "Block Label"
+            },
+	        	{
+		          "type": "article",
+		          "id": "article",
+				      "label": "The article to have this header"
+		        },
+		        {
+		          "type": "image_picker",
+		          "id": "article_img",
+				    "label": "The header image to use"
+		        }
+  			]
+		},
+		{
+      "type": "article_xtra",
+      "name": "Article Specific Xtra",
+      "settings":
+      [
+        {
+          "type": "text",
+          "id": "title",
+		      "label": "Block Label"
+        },
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Choose Article"
+        },
+        {
+          "type": "select",
+          "id": "xtra_num",
+          "label": "Choose Xtra",
+          "default": "0",
+          "options": [	
+            {
+            "value": "0",
+            "label": "No Xtra"
+            },
+            {
+            "value": "1",
+            "label": "Xtra 1"
+            },
+            {
+            "value": "2",
+            "label": "Xtra 2"
+            },
+            {
+            "value": "3",
+            "label": "Xtra 3"
+            },
+            {
+            "value": "4",
+            "label": "Xtra 4"
+            },
+            {
+            "value": "5",
+            "label": "Xtra 5"
+            }
+          ]
+        }
+      ]
+    }
+	]
+}
+{% endschema %}

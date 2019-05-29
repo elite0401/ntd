@@ -1,0 +1,4 @@
+{% layout none %}
+{% for grid_product in collection.products limit: number_of_products_to_fetch %}
+    {% include 'product-grid-item' column_flex: true, quick_view: true %}
+{% endfor %}

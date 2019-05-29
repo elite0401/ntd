@@ -1,0 +1,20 @@
+{% layout none %}{% paginate collection.products by 10000 %}{
+"products": [
+{% for product in collection.products%}
+{% if forloop.index > 1%},{% endif %}
+{
+"id": {{product.id}},
+"title": "{{product.title | escape | replace: '"', '\"'}}",
+"vendor": "{{product.vendor | escape}}",
+"product_type": "{{product.type | escape}}",
+"handle": "{{product.handle}}",
+"url": "{{product.url}}",
+"price" :"{{product.price_min}}",
+"compare_at_price" :"{{product.compare_at_price_min}}",
+"tags": "{{product.tags | join: ","}}",
+"available": {{product.available}},
+"image": "{{product.featured_image | img_url: "2048x"}}"
+}
+{% endfor %}
+]}
+{% endpaginate %}

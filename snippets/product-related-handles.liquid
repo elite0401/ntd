@@ -1,0 +1,10 @@
+<div class="related-products row" data-rp-pick data-pick="{{section.settings.related_products_count}}">
+  {% for tag in product.tags %}
+    {% if tag contains "related-" %}
+      {% assign related_handle = tag  | replace: "related-", "" %}
+      {% if all_products[related_handle].title != "" %}
+        {% include 'product-grid-item' grid_product: all_products[related_handle], column_flex: true, quick_view: section.settings.related_products_quick_view %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>

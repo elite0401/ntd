@@ -1,0 +1,264 @@
+{% include 'content-transformations', content_transform: page.content %}
+{% assign page_img = blank %}
+{% if section.settings.page_img != blank %}
+  {% assign page_img = section.settings.page_img %}
+{% endif %}
+{% for block in section.blocks %}
+	{% if block.type == "page_header" and block.settings.page == page.handle and block.settings.page_img != blank %}
+		{% assign page_img = block.settings.page_img %}
+		{% break %}
+	{% endif %}
+{% endfor %}
+
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "PAGE" %}
+{% endif %}
+{% for block in section.blocks %}
+  {% if block.type == "page_xtra" and block.settings.page == page.handle %}
+    {% assign xtra_num = block.settings.xtra_num %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if page_img != blank %}style="background-image: url({%- include 'image-src', image_src: page_img, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title_img %}<h1>{{ page.title }}</h1>{% endif %}
+</div>
+
+{% unless section.settings.display_title_img %}
+  <div class="large-12 small-12 columns text-center">
+    <h1>{{page.title}}</h1>
+  </div>
+{% endunless %}
+{% if page.handle contains "how-to-swaddle" %}
+<div class="row" data-section-id="{{ section.id }}" data-section-type="page">
+
+  {% include 'breadcrumbs' %}
+
+
+    <div class="small-12 medium-2 medium-offset-1 columns sidebar-container">
+      {% comment %} STATIC SIDEBAR LINKS {% endcomment %}
+      <div class="sidebar">
+          <h1>LEARN</h1>
+          <ul class="sidenav">
+            <li><a href="/pages/how-to-swaddle" class="active" title="How to Swaddle">How to Swaddle</a></li>
+
+            <li><a href="/pages/swaddle-transition-plan-when-to-stop-swaddling" title="Swaddle Transition Plan">Swaddle Transition Plan</a></li>
+
+            <li><a href="/pages/your-babys-sleep-cycle" title="Baby Sleeping Cycle">Baby Sleeping Cycle</a></li>
+
+            <li><a href="/pages/benefits-of-swaddling" title="Benefits of Swaddling">Benefits of Swaddling</a></li>
+
+            <li><a href="/pages/experts-speak" title="Experts Speak">Experts Speak</a></li>
+
+            <li><a href="/pages/moro-reflex" title="Moro Reflex">Moro Reflex</a></li>
+
+            <li><a href="/pages/baby-and-newborn-sleep-schedules-patterns" title="Baby Sleep Simplified ">Baby Sleep Simplified </a></li>
+
+            <li><a href="/pages/sids-the-facts-and-what-they-mean" title="SIDS">SIDS</a></li>
+
+            <li><a href="/pages/surviving-sleep-regressions" title="Sleep Regressions">Sleep Regressions</a></li>
+
+            <li><a href="/pages/sleep-training-guide" title="Sleep Training">Sleep Training</a></li>
+
+            <li><a href="/blogs/zen-blog/4-month-sleep-regression" title="4 Month Sleep Regression">4 Month Sleep Regression</a></li>
+
+          </ul>
+    </div>
+    </div>
+    <div class="small-12 medium-6 columns page-container">
+
+    <div class="rte">
+      {{ page.content }}
+    </div>
+
+
+  </div>
+  <div class="small-12 medium-2 medium-offset-1 columns">
+  </div>
+  {% else %}
+  <div class="row max-width" data-section-id="{{ section.id }}" data-section-type="page">
+
+  {% include 'breadcrumbs' %}
+	{% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+    {% include 'content-transformations', content_transform: page.content %}
+  {% endif %}
+
+  <div class="small-12 {{section.settings.page_canvas_classes}} columns  page-container">
+
+    <div class="rte">
+      {{ page.content }}
+    </div>
+
+    %%TEMPLATE-CONTENT-FAQ%%
+    %%TEMPLATE-CONTENT-CONTACT%%
+
+  </div>
+  {% endif %}
+  {% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+  {% endif %}
+
+</div>
+
+
+{% schema %}
+  {
+    "name": "Page Settings",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "page_img",
+        "label": "Default Page Header",
+        "info": "This image will show up as the header image for all pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display Title On Header Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "page_canvas_classes",
+        "label": "Page Area Classes",
+        "default": "small-12 medium-9 large-9"
+      }
+	],
+	"blocks":[
+	    {
+		    "type": "page_header",
+				"name": "Page Header Image",
+				"settings":[
+		        	{
+			          "type": "text",
+			          "id": "title",
+					      "label": "Block Label"
+			        },
+		        	{
+			          "type": "page",
+			          "id": "page",
+					      "label": "The page to have this header"
+			        },
+			        {
+			          "type": "image_picker",
+			          "id": "page_img",
+					      "label": "The header image to use"
+			        }
+				]
+		},
+		{
+      "type": "page_xtra",
+      "name": "Page Specific Xtra",
+      "settings":
+      [
+        {
+          "type": "text",
+          "id": "title",
+		      "label": "Block Label"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Choose Page"
+        },
+        {
+          "type": "select",
+          "id": "xtra_num",
+          "label": "Choose Page Xtra",
+          "default": "0",
+          "options": [
+            {
+            "value": "0",
+            "label": "No Page Xtra"
+            },
+            {
+            "value": "1",
+            "label": "Page Xtra 1"
+            },
+            {
+            "value": "2",
+            "label": "Page Xtra 2"
+            },
+            {
+            "value": "3",
+            "label": "Page Xtra 3"
+            },
+            {
+            "value": "4",
+            "label": "Page Xtra 4"
+            },
+            {
+            "value": "5",
+            "label": "Page Xtra 5"
+            },
+            {
+            "value": "6",
+            "label": "Page Xtra 6"
+            },
+            {
+            "value": "7",
+            "label": "Page Xtra 7"
+            },
+            {
+            "value": "8",
+            "label": "Page Xtra 8"
+            },
+            {
+            "value": "9",
+            "label": "Page Xtra 9"
+            },
+            {
+            "value": "10",
+            "label": "Page Xtra 10"
+            }
+          ]
+        }
+      ]
+    }
+	]
+}
+{% endschema %}

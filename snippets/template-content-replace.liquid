@@ -1,0 +1,31 @@
+{% assign xtra_content = xtra_content | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_1 = xtra_content_1 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_2 = xtra_content_2 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_3 = xtra_content_3 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_4 = xtra_content_4 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_5 = xtra_content_5 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_6 = xtra_content_6 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_7 = xtra_content_7 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_8 = xtra_content_8 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_9 = xtra_content_9 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% assign xtra_content_10 = xtra_content_10 | replace: 'class="shopify-section', 'class="shopify-section-nested' %}
+{% if template_content_faq != blank %}{% assign template_content_faq = template_content_faq | replace: 'class="shopify-section', 'class="shopify-section-nested' %}{% endif%}
+{% if template_content_contact  != blank %}{% assign template_content_contact = template_content_contact | replace: 'class="shopify-section', 'class="shopify-section-nested' %}{% endif%}
+{% if template_content_sub_collection  != blank %}{% assign template_content_sub_collection = template_content_sub_collection | replace: 'class="shopify-section', 'class="shopify-section-nested' %}{% endif%}
+
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-1%%", xtra_content_1 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-2%%", xtra_content_2 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-3%%", xtra_content_3 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-4%%", xtra_content_4 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-5%%", xtra_content_5 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-6%%", xtra_content_6 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-7%%", xtra_content_7 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-8%%", xtra_content_8 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-9%%", xtra_content_9 %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-10%%", xtra_content_10 %}
+{% unless template_content_faq %}
+    {% assign primary_template_content = primary_template_content | replace: "%%TEMPLATE-CONTENT-FAQ%%", "" %}
+{% endunless %}
+{% unless template_content_contact %}
+    {% assign primary_template_content = primary_template_content | replace: "%%TEMPLATE-CONTENT-CONTACT%%", "" %}
+{% endunless %}

@@ -1,0 +1,13 @@
+{% include 'xtra-content-capture-page' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-page' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'page' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-PAGE%%", xtra_content %}
+
+{{primary_template_content}}

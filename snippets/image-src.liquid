@@ -1,0 +1,5 @@
+{%- if image_src -%}
+{%- assign image_src_src =  image_src | img_url: image_src_sizing -%}
+{%- if image_src contains ".jpg" or image_src contains ".jpeg"%}
+    {%- assign image_src_src =  image_src | img_url: image_src_sizing, format: 'pjpg' -%}
+{% endif %}{{image_src_src}}{%- endif -%}

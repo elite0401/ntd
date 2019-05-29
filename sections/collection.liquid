@@ -1,0 +1,353 @@
+{% include 'content-transformations', content_transform: collection.description %}
+{% if template.name == "collection" and template contains "unpack_0" %}
+  {% assign unpack_option = 0 %}
+{% elsif template.name == "collection" and template contains "unpack_1" %}
+  {% assign unpack_option = 1 %}
+{% elsif template.name == "collection" and template contains "unpack_2" %}
+  {% assign unpack_option = 2 %}
+{% elsif template.name == "collection" and template contains "unpack_3" %}
+  {% assign unpack_option = 3 %}
+{% else %}
+  {% assign unpack_option = section.settings.unpack | plus: 0 %}
+{% endif %}
+
+{% assign xtra_num = "0" %}
+{% if section.settings.xtra %}
+    {% assign xtra_num = "COLLECTION" %}
+{% endif %}
+{% for block in section.blocks %}
+  {% if block.type == "collection_xtra" and block.settings.collection == collection.handle %}
+    {% assign xtra_num = block.settings.xtra_num %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if collection.image != blank %}style="background-image: url({%- include 'image-src', image_src: collection.image, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.display_title and section.settings.display_title_img %}<h1>{{collection.title}}</h1>{% endif %}
+</div>
+
+{% paginate collection.products by section.settings.product_count %}
+
+<div class="row" data-section-id="{{ section.id }}" data-section-type="collection">
+
+  {% include 'breadcrumbs' %}
+
+  {% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+    {% include 'content-transformations', content_transform: collection.description %}
+  {% endif %}
+
+  <div class="small-12 {{section.settings.collection_canvas_classes}} columns {%- if settings.nxt_clent_id != blank %}nxt-content{% endif %}">
+
+    {% if template == "collection.sub_collections" and linklists[collection.handle].links.size > 0 %}
+      %%SUB-COLLECTION%%
+    {% endif %}
+
+    {% if collection.products.size > 0 or template != "collection.sub_collections" %}
+      <div class="row align-center sorting-container">
+      <div class="small-6 medium-6 large-4 columns drop-sort-coll">
+        <div class="select-wrapper">
+          <select id="collectionSorting">
+            {% for link in linklists[section.settings.collection_sorting_links].links %}
+            <option value="{{ link.url }}" {% if link.active %}selected="selected"{% endif %}>{{ link.title }}</option>
+            {% endfor %}
+          </select>
+          </div>
+        </div>
+
+        {% if section.settings.sorting %}
+          <div class="small-6 medium-6 large-4 columns text-center">
+            <div class="select-wrapper">
+            {% include 'collection-sorting' %}
+            </div>
+          </div>
+        {% endif %}
+        </div>
+
+        <div class="row">
+        <div class="row abide">
+
+          {% if collection.products.size == 0 %}
+            <p>{{ 'collections.general.no_matches' | t }}</p>
+          {% elsif unpack_option > 0 %}
+            {% include 'collection-grid-unpacked', grid_collection: collection, unpack_option: unpack_option, quick_view: section.settings.quick_view, grid_item_classes: section.settings.grid_item_classes  %}
+          {% else %} 
+            {% for grid_product in collection.products %}
+              {% include 'product-grid-item', grid_item_loop_index: forloop.index0, quick_view: section.settings.quick_view, grid_item_classes: section.settings.grid_item_classes, grid_item_add2cart: section.settings.display_addtocart_button %}
+            {% else %}
+              <p>{{ 'collections.general.no_matches' | t }}</p>
+            {% endfor %}
+          {% endif %}
+
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <input type="hidden" id="paging-current" value="{{paginate.current_page}}">
+          <input type="hidden" id="paging-next" value="{{paginate.current_page | plus: 1}}">
+          <div class="small-12 columns text-center paginate-control">
+            {% include 'pagination' %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+  {% endif %}
+
+  {% if section.settings.display_description %}
+  <div class="columns collection-description">
+    <h3 class="collection-description-title">More Info About these Products:</h3>
+    <p class="collection-description-text">{{long_content}}</p>
+  </div>
+  {% endif %}
+</div>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Collection pages",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Breadcrumb Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "breadcrumbs_search_list",
+        "label": "Breadcrumb Collection List",
+        "info": "Try and build more levels of breadcrumbs by searching through this navigation list."
+      },
+      {
+        "type": "header",
+        "content": "Display Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view",
+        "label": "Enable Quick View",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title",
+        "label": "Display Title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display Title On Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_description",
+        "label": "Display Description",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_description_img",
+        "label": "Display Description On Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_addtocart_button",
+        "label": "Display Add to Cart Button",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "display_swatches",
+        "label": "Display Swatches",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "product_count",
+        "label": "Products Per Page",
+        "default": 12
+      },
+      {
+        "type": "textarea",
+        "id": "grid_item_classes",
+        "label": "Grid Item Classes",
+        "default": "small-6 large-4"
+      },
+      {
+        "type": "header",
+        "content": "Variant Unpacking Options"
+      },
+      {
+        "type": "select",
+        "id": "unpack",
+        "label": "Variants Unpacking Based On",
+        "default": "0",
+        "info": "If a 'collection.unpack_X' template is selected, that X will determine the setting for this. e.g. 'collection.unpack_2.liquid'",
+        "options": [
+          {
+            "value": "0",
+            "label": "Do Not Unpack"
+          },
+          {
+            "value": "1",
+            "label": "Option 1"
+          },
+          {
+            "value": "2",
+            "label": "Option 2"
+          },
+          {
+            "value": "3",
+            "label": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "unpack_hide_unavailable",
+        "label": "Hide unavailable unpacked variants"
+      },
+      {
+        "type": "header",
+        "content": "Sorting Options"
+      },
+      {
+        "type": "link_list",
+        "id": "collection_sorting_links",
+        "label": "Collection Sorting Links"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting",
+        "label": "Enable Sorting",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_featured",
+        "label": "Featured",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_best_selling",
+        "label": "Best Selling",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_az",
+        "label": "Alphabetical",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_price",
+        "label": "Price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_date",
+        "label": "Date",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "collection_canvas_classes",
+        "label": "Collection Area Classes",
+        "default": "small-12 medium-9 large-9"
+      }
+    ],
+    "blocks":
+    [
+      {
+        "type": "collection_xtra",
+        "name": "Collection Specific Xtra",
+        "settings":
+        [
+          {
+            "type": "text",
+            "id": "title",
+  		      "label": "Block Label"
+          },
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Choose Collection"
+          },
+          {
+            "type": "select",
+            "id": "xtra_num",
+            "label": "Choose Xtra",
+            "default": "0",
+            "options": [
+              {
+              "value": "0",
+              "label": "No Xtra"
+              },
+              {
+              "value": "1",
+              "label": "Xtra 1"
+              },
+              {
+              "value": "2",
+              "label": "Xtra 2"
+              },
+              {
+              "value": "3",
+              "label": "Xtra 3"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,31 @@
+<div class="off-canvas position-{{settings.mobile_menu_direction}}" id="menu-drawer" data-off-canvas data-transition="{{settings.mobile_menu_transition}}" data-options="contentScroll:false;">
+    <h2 class="canvas-title">{{settings.mobile_menu_title}}</h2>
+    <button class="close-button close-left" aria-label="Close menu" type="button" data-close>
+      <i class="fa fa-close" aria-hidden="true"></i>
+    </button>
+    {% if settings.mobile_menu != blank and linklists[settings.mobile_menu].links.size > 0 %}
+        <ul class="menu-canvas-list no-bullets vertical menu accordion-menu" data-accordion-menu>
+            {% for link in linklists[settings.mobile_menu].links %}
+                <li>
+                    <a href="{{ link.url }}" class="nav-link">{{ link.title }}</a>
+                    {% if link.levels > 0 %}
+                      <ul class="menu vertical nested">
+                        {% for link2 in link.links %}
+                          <li>
+                            <a href="{{ link2.url }}" class="nav-link">{{ link2.title }}</a>
+                            {% if link2.levels > 0 %}
+                              <ul class="menu vertical nested">
+                                {% for link3 in link2.links %}
+                                  <li><a href="{{ link3.url }}" class="nav-link">{{ link3.title }}</a></li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

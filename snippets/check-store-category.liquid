@@ -1,0 +1,28 @@
+{% assign location = page.handle %}
+
+{% for link in linklists.learn.links %}
+     {% if link.handle contains location %}
+         {% assign page-sidebar = "learn-sidebar" %}
+     {% endif %}
+{% endfor %}
+
+{% for link in linklists.share.links %}
+     {% if link.handle contains location %}
+         {% assign page-sidebar = "share-sidebar" %}
+     {% endif %}
+{% endfor %}
+
+
+
+{% comment %} Alterative methods
+    {% if location == "our-story" %}
+        {% assign page-sidebar = "learn-sidebar" %}
+    {% endif %}
+
+{% case location %}
+  {% when "our-story", "faq" %}
+     {% assign page-sidebar = "learn-sidebar" %}
+{% endcase %}
+
+{% endcomment %}
+

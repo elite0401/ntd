@@ -1,0 +1,13 @@
+{% include 'xtra-content-capture' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-collection' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'collection' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-COLLECTION%%", xtra_content %}
+
+{{primary_template_content}}

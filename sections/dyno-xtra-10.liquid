@@ -1,0 +1,1504 @@
+{% include 'dyno-page-display-kitchensink' %}
+
+{% schema %}
+{
+    "name":"Xtra 10",
+    "class": "dyno-section",
+    "settings": [
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Section Label",
+        "info": "An internal label to keep track of this content region."
+    },
+    {
+        "type": "header",
+        "content": "Block Defaults",
+        "info": "Here are some colors and options that will be used as defaults within each content block."
+    },
+    {
+        "type": "color",
+        "id": "bgcolor",
+        "label": "Background Color"
+    },
+    {
+        "type": "textarea",
+        "id": "opacity",
+        "label": "Background Opacity"
+    }
+],
+"blocks":
+[
+    {
+        "type": "article",
+        "name": "Article Content",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "article",
+                "id": "object",
+                "label": "Article"
+            },
+            {
+                "type": "checkbox",
+                "id": "text_enable",
+                "label": "Show Article Content",
+                "default": true
+            },
+            {
+                "type": "number",
+                "id": "text_words",
+                "label": "Maximum Words",
+                "default": 500
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_block",
+                "label": "Button Link used for whole content block?"
+            },
+            {
+                "type": "header",
+                "content": "Images"
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_bg",
+                "label": "Display article image as background image?",
+                "default": true
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_content",
+                "label": "Display article image within content?"
+            }
+        ]
+    },
+    {
+        "type": "blog_posts",
+        "name": "Blog - Recent Posts",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+              "type": "blog",
+              "id": "object",
+              "label": "Select Blog",
+              "info": "Leave blank if using blog/article templates to use 'current' blog"
+            },
+            {
+              "type": "checkbox",
+              "id": "hide_current",
+              "label": "Don't Show Current Article"
+            },
+            {
+              "type": "number",
+              "id": "max_posts",
+              "label": "Number of Posts",
+              "default": 5
+            }
+        ]
+    },
+    {
+        "type": "blog_tags",
+        "name": "Blog - Tags",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+              "type": "blog",
+              "id": "object",
+              "label": "Select Blog",
+              "info": "Leave blank if using blog/article templates to use 'current' blog"
+            }
+        ]
+    },
+    {
+        "type": "collection",
+        "name": "Collection Content",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "collection",
+                "id": "object",
+                "label": "Collection"
+            },
+            {
+                "type": "checkbox",
+                "id": "text_enable",
+                "label": "Show Collection Description",
+                "default": true
+            },
+            {
+                "type": "number",
+                "id": "text_words",
+                "label": "Maximum Words",
+                "default": 500
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_block",
+                "label": "Button Link used for whole content block?"
+            },
+            {
+                "type": "header",
+                "content": "Images"
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_bg",
+                "label": "Display collection image as background image?",
+                "default": true
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_content",
+                "label": "Display collection image within content?"
+            }
+        ]
+    },
+    {
+        "type": "collection_filter",
+        "name": "Collection Filtering",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "collection",
+                "id": "object",
+                "label": "Collection",
+                "info": "If none selected, the current collection will be used."
+            },
+            {
+              "type": "textarea",
+              "id": "filter_tags",
+              "label": "Collection Filter tags",
+              "info": "Add a comma-separated list of product tags. Only the tags found in the collection will be displayed as filters"
+            }
+        ]
+    },
+    {
+        "type": "our_promise",
+        "name": "Our Promise Section",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+                "type": "header",
+                "content": "Additional Images"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "textarea",
+                "id": "first_promise_text",
+                "label": "Image 1 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_1_link",
+                "label": "Image 1 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_1_link_new",
+                "label": "Image 1 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            },
+            {
+                "type": "textarea",
+                "id": "second_promise_text",
+                "label": "Image 2 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_2_link",
+                "label": "Image 2 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_2_link_new",
+                "label": "Image 2 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_3",
+                "label": "Image 3"
+            },
+            {
+                "type": "textarea",
+                "id": "third_promise_text",
+                "label": "Image 3 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_3_link",
+                "label": "Image 3 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_3_link_new",
+                "label": "Image 3 Link opens in new window?"
+            }
+        ]
+    },
+    {
+        "type": "custom_content",
+        "name": "Custom Content",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "url",
+                "id": "btn_link",
+                "label": "Button Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_new",
+                "label": "Button Link opens in new window?"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_block",
+                "label": "Button Link used for whole content block?"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "header",
+                "content": "Additional Images"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "textarea",
+                "id": "image_1_text",
+                "label": "Image 1 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_1_link",
+                "label": "Image 1 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_1_link_new",
+                "label": "Image 1 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            },
+            {
+                "type": "textarea",
+                "id": "image_2_text",
+                "label": "Image 2 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_2_link",
+                "label": "Image 2 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_2_link_new",
+                "label": "Image 2 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_3",
+                "label": "Image 3"
+            },
+            {
+                "type": "textarea",
+                "id": "image_3_text",
+                "label": "Image 3 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_3_link",
+                "label": "Image 3 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_3_link_new",
+                "label": "Image 3 Link opens in new window?"
+            }
+        ]
+    },
+    {
+        "type": "menu",
+        "name": "Navigation Menu",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+              "type": "link_list",
+              "id": "object",
+              "label": "Select Menu"
+            },
+            {
+                "type": "header",
+                "content": "Additional Images"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "textarea",
+                "id": "image_1_text",
+                "label": "Image 1 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_1_link",
+                "label": "Image 1 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_1_link_new",
+                "label": "Image 1 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            },
+            {
+                "type": "textarea",
+                "id": "image_2_text",
+                "label": "Image 2 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_2_link",
+                "label": "Image 2 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_2_link_new",
+                "label": "Image 2 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_3",
+                "label": "Image 3"
+            },
+            {
+                "type": "textarea",
+                "id": "image_3_text",
+                "label": "Image 3 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_3_link",
+                "label": "Image 3 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_3_link_new",
+                "label": "Image 3 Link opens in new window?"
+            }
+        ]
+    },
+    {
+        "type": "newsletter",
+        "name": "Newsletter Form",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+                "type": "textarea",
+                "id": "newsletter_text",
+                "label": "Newsletter promo text"
+            },
+            {
+                "type": "textarea",
+                "id": "newsletter_text_classes",
+                "label": "Promo Area Classes",
+                "default": "small-12 large-expand medium-expand large-text-right small-text-center"
+            },
+            {
+                "type": "html",
+                "id": "newsletter_embed",
+                "label": "Third party embed code"
+            },
+            {
+                "type": "textarea",
+                "id": "newsletter_embed_classes",
+                "label": "Embed Area Classes",
+                "default": "small-12 large-expand medium-expand small-only-text-center"
+            }
+        ]
+    },
+    {
+        "type": "page",
+        "name": "Page Content",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+              "type": "page",
+              "id": "object",
+              "label": "Select Page"
+            },
+            {
+                "type": "number",
+                "id": "text_words",
+                "label": "Maximum Words",
+                "default": 500
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_new",
+                "label": "Button Link opens in new window?"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_block",
+                "label": "Button Link used for whole content block?"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "header",
+                "content": "Additional Images"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "textarea",
+                "id": "image_1_text",
+                "label": "Image 1 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_1_link",
+                "label": "Image 1 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_1_link_new",
+                "label": "Image 1 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            },
+            {
+                "type": "textarea",
+                "id": "image_2_text",
+                "label": "Image 2 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_2_link",
+                "label": "Image 2 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_2_link_new",
+                "label": "Image 2 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_3",
+                "label": "Image 3"
+            },
+            {
+                "type": "textarea",
+                "id": "image_3_text",
+                "label": "Image 3 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_3_link",
+                "label": "Image 3 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_3_link_new",
+                "label": "Image 3 Link opens in new window?"
+            }
+        ]
+    },
+    {
+        "type": "product",
+        "name": "Product Content",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "product",
+                "id": "object",
+                "label": "Product"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_price",
+                "label": "Show Product Price",
+                "default": false
+            },
+            {
+                "type": "checkbox",
+                "id": "text_enable",
+                "label": "Show Product Description",
+                "default": true
+            },
+            {
+                "type": "number",
+                "id": "text_words",
+                "label": "Maximum Words",
+                "default": 500
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "checkbox",
+                "id": "btn_link_block",
+                "label": "Button Link used for whole content block?"
+            },
+            {
+                "type": "header",
+                "content": "Images"
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_bg",
+                "label": "Display product image as background image?",
+                "default": true
+            },
+            {
+                "type": "checkbox",
+                "id": "object_image_content",
+                "label": "Display product image within content?"
+            },
+            {
+                "type": "paragraph",
+                "content": "To display up to 3 additional images in this content block, navigate to your selected product. Apply the 'alt text' of 'dyno' to product images to have them displayed here."
+            }
+        ]
+    },
+    {
+        "type": "slider_start",
+        "name": "Slider Start",
+        "settings":
+        [
+            {
+                "type": "paragraph",
+                "content": "This block is a way to specify that the next set of content blocks will be contained within a slider. Be sure to close your slider with a Slider End block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Slider Settings"
+            },
+            {
+                "type": "checkbox",
+                "id": "arrows",
+                "label": "Show Navigation Arrows?",
+                "default":true
+            },
+            {
+                "type": "checkbox",
+                "id": "dots",
+                "label": "Show Navigation Dots?"
+            },
+            {
+                "type": "checkbox",
+                "id": "infinite",
+                "label": "Infinite Scrolling?"
+            },
+            {
+                "type": "number",
+                "id": "slides_to_show",
+                "label": "Slides To Show",
+                "default": 1
+            },
+            {
+                "type": "number",
+                "id": "slides_to_show_small",
+                "label": "Slides To Show On Mobile",
+                "default": 1
+            },
+            {
+                "type": "number",
+                "id": "slides_to_show_medium",
+                "label": "Slides To Show On Tablet",
+                "default": 2
+            },
+            {
+                "type": "number",
+                "id": "slides_to_scroll",
+                "label": "Slides To Scroll",
+                "default":1
+            },
+            {
+              "type": "checkbox",
+              "id": "slider_autoplay",
+              "label": "Auto Play",
+              "default":false
+            },
+            {
+              "type": "number",
+              "id": "slider_autoplay_secs",
+              "label": "Auto Play Delay",
+              "default":2,
+              "info": "Number of seconds before scrolling"
+            }
+        ]
+    },
+    {
+        "type": "slider_end",
+        "name": "Slider End",
+        "settings":
+        [
+            {
+                "type": "paragraph",
+                "content": "This is a placeholder block that will act as the other bookend for your Slider Start block."
+            }
+        ]
+    },
+    {
+        "type": "snippet",
+        "name": "Snippet",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "color",
+                "id": "bgcolor",
+                "label": "Background Color"
+            },
+            {
+                "type": "textarea",
+                "id": "opacity",
+                "label": "Background Opacity"
+            },
+            {
+                "type": "header",
+                "content": "Primary Content"
+            },
+            {
+                "type": "textarea",
+                "id": "preheader",
+                "label": "Pre Header"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+              "type": "text",
+              "id": "snippet",
+              "label": "Snippet Name",
+              "info": "Simply type the name of the snippet file to include."
+            },
+            {
+                "type": "header",
+                "content": "Additional Images"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "textarea",
+                "id": "image_1_text",
+                "label": "Image 1 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_1_link",
+                "label": "Image 1 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_1_link_new",
+                "label": "Image 1 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            },
+            {
+                "type": "textarea",
+                "id": "image_2_text",
+                "label": "Image 2 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_2_link",
+                "label": "Image 2 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_2_link_new",
+                "label": "Image 2 Link opens in new window?"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_3",
+                "label": "Image 3"
+            },
+            {
+                "type": "textarea",
+                "id": "image_3_text",
+                "label": "Image 3 Text"
+            },
+            {
+                "type": "url",
+                "id": "image_3_link",
+                "label": "Image 3 Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "image_3_link_new",
+                "label": "Image 3 Link opens in new window?"
+            }
+        ]
+    },
+    {
+        "type": "sep_title",
+        "name": "Title Separator",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "paragraph",
+                "content": "This content block will display a simple title as a separator between other content blocks."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Content Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Title Text"
+            }
+        ]
+    },
+    {
+        "type": "video_content",
+        "name": "Video Block",
+        "settings":
+        [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Block Label",
+                "info": "An internal label to keep track of this content block."
+            },
+            {
+                "type": "header",
+                "content": "HTML Container Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "classes",
+                "label": "Classes"
+            },
+            {
+                "type": "header",
+                "content": "Background Settings",
+                "info": "Defaults set at the page level above"
+            },
+            {
+                "type": "image_picker",
+                "id": "bgimage",
+                "label": "Background Image"
+            },
+            {
+                "type": "header",
+                "content": "Video "
+            },
+            {
+                "type": "video_url",
+                "id": "video_url",
+                "label": "Video URL",
+                "accept": ["youtube", "vimeo"]
+            },
+            {
+                "type": "header",
+                "content": "Content Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "header",
+                "label": "Header"
+            },
+            {
+                "type": "html",
+                "id": "text",
+                "label": "Text/HTML"
+            },
+            {
+                "type": "header",
+                "content": "Button Settings"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_classes",
+                "label": "Button Classes"
+            },
+            {
+                "type": "textarea",
+                "id": "btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "url",
+                "id": "btn_link",
+                "label": "Button Link"
+            }
+        ]
+    }
+]
+}
+{% endschema %}

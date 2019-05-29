@@ -1,0 +1,404 @@
+{% include 'content-transformations', content_transform: product.description %}
+{%- assign quick_view = false %}
+{%- assign xtra_num = "0" %}
+{%- if template contains "product.quick" %}
+  {% layout none %}
+  {%- assign quick_view = true %}
+{%- else %}
+  {%- if section.settings.xtra %}
+      {%- assign xtra_num = "PRODUCT" %}
+  {%- endif %}
+  {%- for block in section.blocks %}
+    {%- if block.type == "product_xtra" and block.settings.product == product.handle %}
+      {%- assign xtra_num = block.settings.xtra_num %}
+      {%- break %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
+
+{%- assign image_slider_setting = section.settings.image_slider %}
+{%- for ptag in product.tags %}
+  {%- if ptag contains "slider:" %}
+    {%- assign image_slider_setting = ptag | replace : "slider:", "" %}
+  {%- endif %}
+{%- endfor %}
+
+{% include 'product-display' %}
+
+{% schema %}
+  {
+    "name": "Product Pages",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product Page Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "ajax",
+        "label": "Enable AJAX Adding to Cart",
+        "default": false,
+        "info": "Enabling this option will add items to the cart without leaving the page."
+      },
+      {
+        "type": "number",
+        "id": "max_quantity",
+        "label": "Quantity selector maximum",
+        "default": 10
+      },
+      {
+        "type": "number",
+        "id": "quick_view_description_max",
+        "label": "Maximum description length on product quick view",
+        "default": 250
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swatches",
+        "label": "Enable product swatches",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "variant_images",
+        "label": "Enable variant image filtering",
+        "default": false,
+        "info":"Only show the selected variant, and related images based on the image's ALT text matching a variant option value"
+      },
+      {
+        "type": "html",
+        "id": "quantity_note",
+        "label": "Product Note"
+      },
+      {
+        "type": "richtext",
+        "id": "shipping_note",
+        "label": "Shipping Note",
+        "info": "Text will be shown under the ATC button"
+      },
+      {
+        "type": "header",
+        "content": "Breadcrumb Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "breadcrumbs_search_list",
+        "label": "Breadcrumb Collection List",
+        "info": "If unable to determine the collection the product is from, search through this navigation list to find one."
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_all_products",
+        "label": "Show defaut collection in Breadcrumbs",
+        "info": "If still unable to determine the collection the product is from, should breadcrumbs display a link to all products?",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Product Image Slider Options"
+      },
+      {
+        "type": "select",
+        "id": "image_slider",
+        "label": "Image Slider",
+        "default": "none",
+        "options": [
+          {
+          "value": "none",
+          "label": "No Slider"
+          },
+          {
+          "value": "slider",
+          "label": "Enable Slider"
+          },
+          {
+          "value": "mobile",
+          "label": "Slider On Mobile Only"
+          },
+          {
+          "value": "desktop",
+          "label": "Slider On Desktop Only"
+          }
+        ]
+      },
+      {
+          "type": "select",
+          "id": "slider_thumbnails",
+          "label": "Display Thumbnails Under Slider",
+          "default":"none",
+          "options": [
+            {
+            "value": "none",
+            "label": "No"
+            },
+            {
+            "value": "all",
+            "label": "Yes"
+            },
+            {
+            "value": "mobile",
+            "label": "Mobile Only"
+            },
+            {
+            "value": "desktop",
+            "label": "Desktop Only"
+            }
+          ]
+      },
+      {
+          "type": "checkbox",
+          "id": "arrows",
+          "label": "Show Navigation Arrows",
+          "default":true
+      },
+      {
+          "type": "checkbox",
+          "id": "dots",
+          "label": "Show Navigation Dots"
+      },
+      {
+          "type": "checkbox",
+          "id": "infinite",
+          "label": "Infinite Scrolling"
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show",
+          "label": "Slides To Show",
+          "default": 1
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show_small",
+          "label": "Slides To Show On Mobile",
+          "default": 1
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show_medium",
+          "label": "Slides To Show On Tablet",
+          "default": 2
+      },
+      {
+          "type": "number",
+          "id": "slides_to_scroll",
+          "label": "Slides To Scroll",
+          "default":1
+      },
+      {
+        "type": "checkbox",
+        "id": "slider_autoplay",
+        "label": "Auto Play",
+        "default":false
+      },
+      {
+        "type": "number",
+        "id": "slider_autoplay_secs",
+        "label": "Auto Play Delay",
+        "default":2,
+        "info": "Number of seconds before scrolling"
+      },
+      {
+        "type": "header",
+        "content": "Zoom Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "image_zoom_icon",
+        "label": "Display Image Zoom Icon",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "image_zoom",
+        "label": "Enable Product Image Zoom",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "image_zoom_mobile",
+        "label": "Enable Zoom on Mobile",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "image_zoom_trigger",
+        "label": "Image Zoom Trigger (click, mouseover, grab)",
+        "default": "mouseover"
+      },
+      {
+        "type": "text",
+        "id": "image_zoom_magnification",
+        "label": "Image Zoom Magnification (percentage: 0.0 - 1.0)",
+        "default": ".70"
+      },
+      {
+        "type": "header",
+        "content": "Xtra Content Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "xtra",
+        "label": "Enable Xtra Content",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "xtra_classes",
+        "label": "Xtra Classes",
+        "default": "small-12 medium-3 large-3"
+      },
+      {
+        "type": "select",
+        "id": "xtra_position",
+        "label": "Xtra Position",
+        "default": "left-top",
+        "options": [
+          {
+          "value": "left-top",
+          "label": "Left or Top"
+          },
+          {
+          "value": "right-bottom",
+          "label": "Right or Bottom"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "id": "product_canvas_classes",
+        "label": "Product Area Classes",
+        "default": "small-12 medium-9 large-9"
+      },
+      {
+        "type": "header",
+        "content": "Related Products"
+      },
+      {
+         "type":      "radio",
+         "id":        "related_products_type",
+         "label":     ":",
+         "options": [
+           { "value": "none", "label": "No Related Products" },
+           { "value": "collection", "label": "Products in a shared collection" },
+           { "value": "handles", "label": "Products set via \"related-PRODUCT-HANDLE\" tags" },
+           { "value": "tag-shared", "label": "Products matching any tag with \"related-\" prefix" },
+           { "value": "tag-handle", "label": "Products matching a \"related-PRODUCT-HANDLE\" tag" }
+         ],
+         "default":   "none"
+      },
+      {
+        "type": "select",
+        "id": "related_products_count",
+        "label": "Maximum Related Products",
+        "default": "3",
+        "options": [
+          {
+          "value": "3",
+          "label": "3"
+          },
+          {
+          "value": "4",
+          "label": "4"
+          },
+          {
+          "value": "5",
+          "label": "5"
+          },
+          {
+          "value": "6",
+          "label": "6"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "related_products_quick_view",
+        "label": "Enable Quick View"
+      }
+    ],
+    "blocks":[
+  		{
+        "type": "product_xtra",
+        "name": "Product Specific Xtra",
+        "settings":
+        [
+          {
+            "type": "text",
+            "id": "title",
+    	      "label": "Block Label"
+          },
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Choose Product"
+          },
+          {
+            "type": "select",
+            "id": "xtra_num",
+            "label": "Choose Xtra",
+            "default": "0",
+            "options": [
+              {
+              "value": "0",
+              "label": "No Xtra"
+              },
+              {
+              "value": "1",
+              "label": "Xtra 1"
+              },
+              {
+              "value": "2",
+              "label": "Xtra 2"
+              },
+              {
+              "value": "3",
+              "label": "Xtra 3"
+              },
+              {
+              "value": "4",
+              "label": "Xtra 4"
+              },
+              {
+              "value": "5",
+              "label": "Xtra 5"
+              },
+              {
+              "value": "6",
+              "label": "Xtra 6"
+              },
+              {
+              "value": "7",
+              "label": "Xtra 7"
+              },
+              {
+              "value": "8",
+              "label": "Xtra 8"
+              },
+              {
+              "value": "9",
+              "label": "Xtra 9"
+              },
+              {
+              "value": "10",
+              "label": "Xtra 10"
+              }
+            ]
+          }
+        ]
+      }
+	]
+}
+{% endschema %}

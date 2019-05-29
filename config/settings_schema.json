@@ -1,0 +1,577 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "GST",
+    "theme_version": "1.0.0",
+    "theme_author": "Growth Spark",
+    "theme_documentation_url": "https:\/\/www.growthspark.com",
+    "theme_support_email": "theme-support@growthspark.com"
+  },
+  {
+    "name": "Site Settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Graphics"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_primary",
+        "label": "Primary Logo",
+        "info": "Used in various places around the site"
+      },
+      {
+        "type": "image_picker",
+        "id": "shortcut_icon",
+        "label": "Shortcut Icon",
+        "info": "Used for browser tabs. Will be scaled down to 32 x 32px."
+      },
+      {
+        "type": "image_picker",
+        "id": "social_image",
+        "label": "Default Social Sharing Image",
+        "info": "Used for sharing home page to social networks or any other page that does not have an image associated with it."
+      },
+      {
+        "type": "header",
+        "content": "Other Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "admin_bar",
+        "label": "Display Top Admin Bar",
+        "info": "Only shows when an admin is logged in",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Global Display Settings",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "body_classes",
+        "label": "Body Tag Classes",
+        "default": "relative-header"
+      },
+      {
+        "type": "number",
+        "id": "display_breakpoint_medium",
+        "label": "Medium Screen Width",
+        "default": 640
+      },
+      {
+        "type": "number",
+        "id": "display_breakpoint_large",
+        "label": "Large Screen Width",
+        "default": 1024
+      },
+      {
+        "type": "number",
+        "id": "display_site_width",
+        "label": "Max Site Width",
+        "default": 1580
+      },
+      {
+        "type": "number",
+        "id": "display_content_width",
+        "label": "Max Contents Width",
+        "default": 1260
+      },
+      {
+        "type": "number",
+        "id": "display_text_width",
+        "label": "Max Text Width",
+        "default": 800
+      }
+    ]
+  },
+  {
+    "name": "Global Header Scripts",
+    "settings": [
+      {
+        "type": "html",
+        "id": "header_scripts",
+        "label": "Script Content"
+      },
+      {
+        "type": "header",
+        "content": "Header Snippets",
+        "info": "This advanced feature allows for the content of up to 5 theme snippets to be included before the end <\/head> tag"
+      },
+      {
+        "type": "paragraph",
+        "content": "Do NOT add 'gs-scripts-header' or 'customer-scripts-header' since those are automatically included"
+      },
+      {
+        "type": "snippet",
+        "id": "header_snippets_1",
+        "label": "Snippet 1"
+      },
+      {
+        "type": "snippet",
+        "id": "header_snippets_2",
+        "label": "Snippet 2"
+      },
+      {
+        "type": "snippet",
+        "id": "header_snippets_3",
+        "label": "Snippet 3"
+      },
+      {
+        "type": "snippet",
+        "id": "header_snippets_4",
+        "label": "Snippet 4"
+      },
+      {
+        "type": "snippet",
+        "id": "header_snippets_5",
+        "label": "Snippet 5"
+      }
+    ]
+  },
+  {
+    "name": "Global Footer Scripts",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "footer_scripts",
+        "label": "Script Content"
+      },
+      {
+        "type": "header",
+        "content": "Footer Snippets",
+        "info": "This advanced feature allows for the content of up to 5 theme snippets to be included before the end <\/body> tag"
+      },
+      {
+        "type": "paragraph",
+        "content": "Do NOT add 'gs-scripts-footer' or 'customer-scripts-footer' since those are automatically included"
+      },
+      {
+        "type": "snippet",
+        "id": "footer_snippets_1",
+        "label": "Snippet 1"
+      },
+      {
+        "type": "snippet",
+        "id": "footer_snippets_2",
+        "label": "Snippet 2"
+      },
+      {
+        "type": "snippet",
+        "id": "footer_snippets_3",
+        "label": "Snippet 3"
+      },
+      {
+        "type": "snippet",
+        "id": "footer_snippets_4",
+        "label": "Snippet 4"
+      },
+      {
+        "type": "snippet",
+        "id": "footer_snippets_5",
+        "label": "Snippet 5"
+      }
+    ]
+  },
+  {
+    "name": "Mobile Navigation",
+    "settings": [
+      {
+        "type": "text",
+        "id": "mobile_menu_title",
+        "label": "Menu Title",
+        "default": "Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "mobile_menu",
+        "label": "Menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "select",
+        "id": "mobile_menu_direction",
+        "label": "Slide Direction",
+        "default": "left",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "mobile_menu_transition",
+        "label": "Slide Transition",
+        "default": "push",
+        "options": [
+          {
+            "value": "push",
+            "label": "Push"
+          },
+          {
+            "value": "overlap",
+            "label": "Overlap"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mega menus",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Select the number of custom mega menus to enable"
+      },
+      {
+        "type": "checkbox",
+        "id": "mega_menu_1",
+        "label": "Enable mega menu 1"
+      },
+      {
+        "type": "checkbox",
+        "id": "mega_menu_2",
+        "label": "Enable mega menu 2"
+      },
+      {
+        "type": "checkbox",
+        "id": "mega_menu_3",
+        "label": "Enable mega menu 3"
+      },
+      {
+        "type": "checkbox",
+        "id": "mega_menu_4",
+        "label": "Enable mega menu 4"
+      },
+      {
+        "type": "checkbox",
+        "id": "mega_menu_5",
+        "label": "Enable mega menu 5"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "html",
+        "id": "typography_scripts",
+        "label": "3rd Party Font Scripts",
+        "info": "e.g. Google Fonts, TypeKit, etc..."
+      },
+      {
+        "type": "select",
+        "id": "type_base_size",
+        "label": "Base size",
+        "default": "16px",
+        "options": [
+          {
+            "value": "14px",
+            "label": "14px"
+          },
+          {
+            "value": "15px",
+            "label": "15px"
+          },
+          {
+            "value": "16px",
+            "label": "16px"
+          },
+          {
+            "value": "17px",
+            "label": "17px"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "font_headline",
+        "label": "Font for headline text",
+        "default": "helvetica"
+      },
+      {
+        "type": "text",
+        "id": "font_accent",
+        "label": "Font for accent text",
+        "default": "helvetica"
+      },
+      {
+        "type": "text",
+        "id": "font_paragraph",
+        "label": "Font for paragraph text",
+        "default": "helvetica"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary color",
+        "default": "#000",
+        "info": "Used for text links, and primary buttons"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary color",
+        "default": "#000",
+        "info": "Color used for content and paragraph text"
+      },
+      {
+        "type": "color",
+        "id": "color_low_gray",
+        "label": "Low Gray color",
+        "default": "#000",
+        "info": "Color used for subtle light gray background tones"
+      },
+      {
+        "type": "color",
+        "id": "color_mid_gray",
+        "label": "Mid Gray color",
+        "default": "#000",
+        "info": "Color used for medium background gray tones"
+      },
+      {
+        "type": "color",
+        "id": "color_high_gray",
+        "label": "High Gray color",
+        "default": "#000",
+        "info": "Color used for dark gray background tones"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social sharing options"
+      },
+      {
+        "type": "checkbox",
+        "id": "social_sharing_blog",
+        "label": "Enable sharing for blog articles",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_facebook",
+        "label": "Share on Facebook",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_twitter",
+        "label": "Tweet on Twitter",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_pinterest",
+        "label": "Pin on Pinterest",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Sharing links"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter link"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook link"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest link"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram link"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat link"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr link"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "Youtube link"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo link"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart Type",
+        "default": "page",
+        "options": [
+          {
+            "value": "page",
+            "label": "Full Page"
+          },
+          {
+            "value": "drawer",
+            "label": "Slide Out"
+          },
+          {
+            "value": "drawer_mobile",
+            "label": "Slide Out Mobile Only"
+          },
+          {
+            "value": "drawer_desktop",
+            "label": "Slide Out Desktop Only"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "cart_direction",
+        "label": "Cart Slide Direction",
+        "info": "Only for 'Slide Out' cart type",
+        "default": "right",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_display_vendor",
+        "label": "Display Vendor?",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable cart notes",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "cart_ribbon_delay",
+        "label": "How long should 'add to cart' ribbon display on top of page?",
+        "info": "Number is milliseconds",
+        "default": 5000
+      },
+      {
+        "type": "number",
+        "id": "cart_max_quantity",
+        "label": "Maximum number for quantity selector",
+        "default": 10
+      }
+    ]
+  },
+  {
+    "name": "Advanced Settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Pricing Rules",
+        "info": "This feature requires Shopify Plus and a companion Shopify Script to honor any price changes in the cart."
+      },
+      {
+        "type": "paragraph",
+        "content": "When enabled, a special section will appear below the Footer section which will allow you to specify a set of rules (customer tags) to affect a product's price."
+      },
+      {
+        "type": "checkbox",
+        "id": "pricing_rules",
+        "label": "Enable Pricing Rules"
+      },
+      {
+        "type": "header",
+        "content": "Cart Upsell",
+        "info": "This feature allows for the specification of rules to show upsell products in the cart.."
+      },
+      {
+        "type": "paragraph",
+        "content": "When enabled, a special section will appear above the Header section which will allow you to specify a set of rules for which products to show as upsell items."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_upsell",
+        "label": "Enable Cart Upsell"
+      },
+      {
+        "type": "header",
+        "content": "Nextopia"
+      },
+      {
+        "type": "paragraph",
+        "content": "Nextopia is a service that provides extended functionality of search results and collection pages. Only use these settings if the app is installed and really will be used."
+      },
+      {
+        "type": "paragraph",
+        "content": "Be sure to create a collection with the handle of 'search-results'."
+      },
+      {
+        "type": "text",
+        "id": "nxt_client_id",
+        "label": "Nextopia Client ID",
+        "info": "This will enable all other Nextopia settings. Retrieve this from GrowthSpark or the Nextopia representative."
+      },
+      {
+        "type": "checkbox",
+        "id": "nxt_recommendations",
+        "label": "Use Nextopia Recomendations"
+      }
+    ]
+  }
+]

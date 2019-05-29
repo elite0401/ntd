@@ -1,0 +1,14 @@
+<div class="product-badge-wrapper">
+    {% if badge_product.available == false %}
+        <span class="product-badge product-badge-oos" data-handle="{{badge_product.handle}}">Sold Out</span>
+    {% elsif badge_product.compare_at_price_min > badge_product.price_min and badge_product.available %}
+        <span class="product-badge product-badge-sale" data-handle="{{badge_product.handle}}">On Sale</span>
+    {% endif %}
+    
+    {% if badge_product.tags contains "data::badge::best-seller" %}
+        <span class="product-badge product-badge-custom" data-handle="{{badge_product.handle}}">Best Seller</span>
+    {% endif %}
+    {% if badge_product.tags contains "data::badge::coming-soon" %}
+        <span class="product-badge product-badge-custom" data-handle="{{badge_product.handle}}">Coming Soon</span>
+    {% endif %}
+</div>

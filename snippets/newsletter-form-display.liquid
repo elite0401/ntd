@@ -1,0 +1,10 @@
+<div class="row newsletter-entry">
+  {% if newsletter_settings.newsletter_text != "" %}
+    <div class="columns {{newsletter_settings.newsletter_text_classes}}">
+      <h4 class="newsletter-head">{{newsletter_settings.newsletter_text}}</h4>
+    </div>
+  {% endif %}
+  <div class="columns {{newsletter_settings.newsletter_embed_classes}}">
+    {{newsletter_settings.newsletter_embed}}
+  </div>
+</div>

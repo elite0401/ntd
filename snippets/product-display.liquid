@@ -1,0 +1,336 @@
+{% comment %} SpeedBoostr_2019 {% endcomment %}
+<div class="row" section-id="{{ section.id }}" data-enable-history-state="true" data-section-type="product" {% if quick_view %}data-product-quickview{% endif %}>
+  {% if quick_view %}
+    {% include 'cart-ribbon' %}
+  {% else %}
+    {% include 'breadcrumbs' %}
+  {% endif %}
+
+  {% if xtra_num != "0" and section.settings.xtra_position == "left-top" %}
+    <div class="{{section.settings.xtra_classes}} columns">
+      %%XTRA-{{xtra_num}}%%
+    </div>
+  {% endif %}
+
+  {% unless product.empty? %}
+    <script type="application/json" data-product-json>{{ product | json }}</script>
+    <script type="application/json" data-section-json>{{ section.settings | json }}</script>
+  {% endunless %}
+
+  <div class="small-12 {{section.settings.product_canvas_classes}} columns product-container">
+
+    <div class="row" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
+
+      {%- assign current_variant = product.selected_or_first_available_variant -%} {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+      <meta itemprop="name" content="{{ product.title }}{% unless current_variant.title == 'Default Title' %} - {{ current_variant.title }}{% endunless %}">
+      <meta itemprop="url" content="{{ shop.url }}{{ current_variant.url }}">
+      <meta itemprop="brand" content="{{ product.vendor }}">
+      <meta itemprop="image" content="{{ featured_image | img_url: '600x600' }}">
+      <meta itemprop="description" content="{{ product.description | strip_html | escape }}">
+
+      <div class="small-12 medium-12 large-6 columns">
+
+        <div class="row product-images {% if image_slider_setting == "desktop" %}image-slider-desktop{% elsif image_slider_setting == "mobile" %}image-slider-mobile{% endif %}">
+
+          {% if image_slider_setting != "none" %}
+            <div class="small-12 columns product-image-slider">
+              <div data-product-image-slider
+                data-slider-arrows="{{section.settings.arrows}}"
+                data-slider-dots="{{section.settings.dots}}"
+                data-slider-infinite="{{section.settings.infinite}}"
+                data-slider-slides-to-show="{{section.settings.slides_to_show}}"
+                data-slider-slides-to-show-small="{{section.settings.slides_to_show_small}}"
+                data-slider-slides-to-show-medium="{{section.settings.slides_to_show_medium}}"
+                data-slider-slides-to-scroll="{{section.settings.slides_to_scroll}}"
+                data-slider-autoplay="{{section.settings.slider_autoplay}}"
+                data-slider-autoplay-secs="{{section.settings.slider_autoplay_secs}}">
+                {% for image in product.images %}
+                  <div class="product-image-instance product-image-slide image-zoom" data-image="{{image.id}}"
+                  data-variants="{%- for ivar in image.variants %}{{ivar.id}}{%- endfor %}"
+                  {% if section.settings.image_zoom %}data-product-image-zoom data-image-zoom-mobile="{{section.settings.image_zoom_mobile}}"
+                  data-image-zoom-trigger="{{section.settings.image_zoom_trigger}}"
+                  data-image-zoom-percentage="{{section.settings.image_zoom_magnification}}"{% endif %}
+                  data-image-alt="{{image.alt}}"
+                  data-image-variants="0{% for iv in image.variants %},{{iv.id}}{% endfor %}">
+                  {% if section.settings.image_zoom_icon %}
+                  {% include 'icon-plus' %}
+                  {% endif %}
+                    {% include 'image-tag',
+                      image_tag_src : image,
+                      image_tag_alt: image.alt
+                      image_tag_sizing: '2048x',
+                      image_tag_classes: '' %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% comment %} SpeedBoostr 3-7 {% endcomment %}
+            {% if quick_view == false and product.images.size > 1 and section.settings.slider_thumbnails != "none" %}
+              <div class="small-12 columns product-image-slider-thumbs product-image-slider-thumbs-{{section.settings.slider_thumbnails}}">
+                <ul class="inline-list no-bullets image-thumb-gallery">
+                  {% for image in product.images %}
+                  <li data-image-alt="{{image.alt}}" data-image-variants="0{% for iv in image.variants %},{{iv.id}}{% endfor %}">
+                    <a href="#" data-image="{{image.id}}" data-product-slider-thumbnail>
+                      {% include 'image-tag',
+                        image_tag_src : image,
+                        image_tag_alt: image.alt
+                        image_tag_sizing: '160x160',
+                        image_tag_classes: 'lazyload' %}
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endif %}
+          {% if image_slider_setting != "slider" %}
+            <div class="small-2 large-2 columns product-image-gallery">
+              {% if product.images.size > 1 and quick_view == false %}
+              <ul class="no-bullets image-thumb-gallery">
+                {% for image in product.images %}
+                <li data-image-alt="{{image.alt}}" data-image-variants="0{% for iv in image.variants %},{{iv.id}}{% endfor %}">
+                  <a href="{{ image | img_url: '2048x', format: 'pjpg' }}" data-product-single-thumbnail>
+                    {% if section.settings.image_zoom_icon %}
+                    {% include 'icon-plus' %}
+                    {% endif %}
+                    {% include 'image-tag',
+                      image_tag_src : image,
+                      image_tag_alt: image.alt
+                      image_tag_sizing: '160x160',
+                      image_tag_classes: 'lazyload' %}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+
+            </div>
+            <div class="small-10 large-10 product-image-gallery image-zoom" {% if section.settings.image_zoom %}data-product-image-zoom data-image-zoom-trigger="{{section.settings.image_zoom_trigger}}" data-image-zoom-percentage="{{section.settings.image_zoom_magnification}}"{% endif %}>
+              {% if section.settings.image_zoom_icon %}
+              {% include 'icon-plus' %}
+              {% endif %}
+              {% include 'image-tag',
+                image_tag_src : featured_image,
+                image_tag_alt: featured_image.alt
+                image_tag_sizing: '2048x',
+                image_tag_classes: 'lazyload',
+                image_tag_data: 'data-product-featured-image'%}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="small-12 medium-12 large-6 columns padding-medium prod-stuff-container">
+
+
+        {% include 'product-badge', badge_product: product %}
+        <h1 class="prod-title" data-product-title>{{ product.title }}</h1>
+        <!-- LOOX REVIEWS Star Rating -->
+        <a href="#looxReviews"><div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}"></div></a>
+        <p class="hide" data-product-vendor>{{ product.vendor }}</p>
+        <p class="hide" data-variant-sku>{{ current_variant.sku }}</p>
+        <p class="hide" data-variant-barcode>{{ current_variant.barcode }}</p>
+        <p class="hide" data-variant-id>{{ current_variant.id }}</p>
+
+      <!-- Product tab links for different products -->
+      <div class="tab-btns">
+      {% for tag in product.tags %}
+        {% assign tag_value = tag | split: ":" %}
+        {% if tag_value[0] == 'self-tab' %}
+        <div class="tab-btn tab-on"><a href="{{ product.url }}">{{ tag_value[1] }}</a></div>
+        {% elsif tag_value[0] == 'tab' %}
+          {% assign tab_product_handle = tag_value[2] %}
+          <div class="tab-btn"><a href="{{ all_products[tab_product_handle].url }}">{{ tag_value[1] }}</a></div>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="prod-info-tab">
+        <div class="prod-price" data-price-wrapper data-product-id="{{product.id}}">
+          <span data-product-price class="{% unless product.tags contains "price-static" %}price-display {% if product.compare_at_price_max > product.price %}actual-price{% endif %}{% endunless %}">
+            {{ current_variant.price | money }}
+          </span>
+          {% if product.compare_at_price_max > product.price %}
+            <span class="visually-hidden {% unless product.tags contains "price-static" %}price-display old-price{% endunless %}" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+            <s data-compare-price class="{% unless product.tags contains "price-static" %}price-display old-price{% endunless %}">
+              {% if current_variant.compare_at_price > current_variant.price %}
+                {{ current_variant.compare_at_price | money }}
+              {% endif %}
+            </s>
+            {% endif %}
+        </div>
+
+        <div class="rte prod-content prod-content-one">
+          {% if quick_view %}
+            <p>{{ long_content[0] | strip_html | truncate: section.settings.quick_view_description_max }}</p>
+          {% else %}
+            {{ long_content[0] }}
+          {% endif %}
+          {% for variant in product.variants %}
+            {% if variant.metafields.nestedData.variantInfo %}
+            <p class="variant-info rte {{ variant.option1 | downcase | handleize }}" {% unless product.selected_or_first_available_variant == variant %}style="display: none;"{% endunless %}>{{ variant.metafields.nestedData.variantInfo }}</p>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+          <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+          <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+
+          <form action="/cart/add" method="post" enctype="multipart/form-data" data-product-form>
+
+            {% comment %}Special Date Field. Enable this field via JS to group multiple items in the cart together{% endcomment %}
+            <input type="hidden" class="prop-dtstamp" id="dtstamp-{{product.id}}" name="properties[_dtstamp]" disabled>
+
+            {% comment %}special input field to be populated by pricing rules{% endcomment %}
+            <input type="hidden" class="pr-property-{{product.id}}" id="pr-property-{{product.id}}" name="properties[_pr_{{product.id}}]" disabled>
+
+            <div class="row">
+              {% unless product.variants.size == 1 and product.options.size == 1 and product.options.first == 'Title' and product.variants.first.title == 'Default Title' %}
+
+                {% for option in product.options_with_values %}
+                  <div class="columns {% if section.settings.swatches %}hide{% endif %}">
+                    <div class="selector-wrapper js">
+                      <label {% if option.name=='default' %}class="label-hidden" {% endif %} for="SingleOptionSelector-{{ forloop.index0 }}">
+                        {{ option.name }}
+                      </label>
+
+                      <select id="SingleOptionSelector-{{ forloop.index0 }}" data-single-option-selector data-index="option{{ option.position }}">
+                        {% for value in option.values %}
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                            {{ value }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                {% endfor %}
+
+
+                {% if section.settings.swatches %}
+                  <div class="columns swatch_options" data-swatches>
+                    {% for option in product.options %}
+                        {% include 'product-swatch' with option %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              {% endunless %}
+
+
+              <select name="id[]" class="no-js hide" data-product-select>
+                {% for variant in product.variants %}
+                  <option {% if variant == current_variant %}selected="selected"{% endif %}
+                    {% unless variant.available %}disabled="disabled"{% endunless %}
+                    value="{{ variant.id }}">{{ variant.title }}
+                  </option>
+                {% endfor %}
+              </select>
+
+              <div class="columns small-12">
+                <div class="selector-wrapper">
+                  <label for="quantity">{{ 'products.product.quantity' | t }}</label>
+                  <div class="product-quantity input-group input-number-group">
+                    <div class="input-group-button">
+                      <span class="input-number-decrement input-number-decrement-global">-</span>
+                    </div>
+                    <input class="input-number" id="quantity" type="number" name="quantity" value="1" min="1" max="{{section.settings.max_quantity}}">
+                    <div class="input-group-button">
+                      <span class="input-number-increment input-number-increment-global">+</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="checkout-note">
+                  {{ long_content[2] }}
+                </div>
+              </div>
+            </div>
+
+            <button class="button primary full" type="submit" name="add" data-loading-text="{{ 'products.product.add_to_cart_loading' | t }}" data-add-to-cart {% unless current_variant.available %}disabled="disabled" {% endunless %} {% if section.settings.ajax %}data-ajax{% endif %}>
+              <span data-add-to-cart-text>
+                {% if current_variant.available %}
+                  {{ 'products.product.add_to_cart' | t }}
+                {% else %}
+                  {{ 'products.product.sold_out' | t }}
+                {% endif %}
+              </span>
+            </button>
+            <div class="row">
+              <div class="columns small-12">
+                <div class="shipping-note">
+                  {{ section.settings.shipping_note }}
+                </div>
+                {% comment %}
+                <div class="_GUARANTEE_Kicker_Container" style="text-align: center; margin: 10px 0;">
+                <span id="_GUARANTEE_Kicker" name="_GUARANTEE_Kicker" type="Kicker Custom Minimal2"></span>
+                </div>
+                {% endcomment %}
+              </div>
+              <div class="columns small-12 payment-icons">
+                {% assign enabled_payment_types = 'visa,master,american_express,discover,paypal,' | remove: ' ' | split: ',' %}
+                {% for type in enabled_payment_types %}
+                  {{ type | payment_type_svg_tag: class:'payment-icon' }}
+                {% endfor %}
+              </div>
+            </div>
+
+        </div>
+
+        </form>
+        {% if quick_view %}
+          <a class="small-link" href="{{product.url}}">{{ 'products.product.quick_view_details_link' | t }}</a>
+        {% endif %}
+
+         {% if section.settings.show_share_buttons %} {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %} {% endif %}
+
+      </div>
+     </div>
+      <div class="small-12 medium-12 large-12 columns">
+        {% if long_content.size > 1 and quick_view == false %}
+        <div class="rte" class="prod-content prod-content-two">
+          {{ long_content[1] }}
+        {% endif %}
+      </div>
+
+    </div>
+
+
+
+    </div>
+  </div>
+
+  {% comment %}
+  {% include 'cross-sell' %}
+  {% endcomment %}
+
+  {% if section.settings.related_products_type != "" and quick_view == false %}
+    <div class="row related-products-qv-{{section.settings.related_products_quick_view}}" id="prod-content-related" data-related-products="{{section.settings.related_products_type}}">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>{{ 'products.product.related_products' | t }}</h2>
+        {% if section.settings.related_products_type == "tag-handle" %}
+          {% include 'product-related-tag-handle' %}
+        {% elsif section.settings.related_products_type == "tag-shared" %}
+          {%include 'product-related-tag-shared' %}
+        {% elsif section.settings.related_products_type == "handles" %}
+          {% include 'product-related-handles' %}
+        {% elsif section.settings.related_products_type == "collection" %}
+          {% include 'product-related-collection' %}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+
+{% include 'back-to-top' %}
+</div>
+
+{% if xtra_num != "0" and section.settings.xtra_position == "right-bottom" %}
+  <div class="{{section.settings.xtra_classes}}">
+    %%XTRA-{{xtra_num}}%%
+  </div>
+{% endif %}
+
+<div class="row" style="width: 100%;">
+  <div class="small-12 medium-12 large-12 columns" id="looxReviews" data-product-id="{{product.id}}">{{ product.metafields.loox.reviews }}</div>
+</div>

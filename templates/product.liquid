@@ -1,0 +1,59 @@
+{% include 'xtra-content-capture' %}
+{% capture xtra_content %}
+    {% section 'dyno-xtra-product' %}
+{% endcapture %}
+
+{% capture primary_template_content %}
+    {% section 'product' %}
+{% endcapture %}
+
+{% include 'template-content-replace' %}
+{% assign primary_template_content = primary_template_content | replace: "%%XTRA-PRODUCT%%", xtra_content %}
+
+{{primary_template_content}}
+
+{% if product.metafields.loox.num_reviews %}
+<script id="looxSchemaJson" type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "Product",
+	"aggregateRating": {
+		"@type": "AggregateRating",
+		"ratingValue": "{{ product.metafields.loox.avg_rating }}",
+		"reviewCount": "{{ product.metafields.loox.num_reviews }}"
+	},
+	"name": "{{ product.title }}"
+}
+</script>
+{% endif %}
+
+	<div id="looxReviews" data-product-id="{{product.id}}" class="loox-reviews-default">{{ product.metafields.loox.reviews }}</div>{%include 'preorder-me-widget'%}
+
+<script text="text/javascript">
+ var _learnq = _learnq || [];
+ var item = {
+   Name: {{ product.title|json }},
+   ProductID: {{ product.id|json }},
+   Categories: {{ product.collections|map:'title'|json }},
+   ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+   URL: "{{ shop.secure_url }}{{ product.url }}",
+   Brand: {{ product.vendor|json }},
+   Price: {{ product.price|money|json }},
+   CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+ };
+
+ _learnq.push(['track', 'Viewed Product', item]);
+
+ _learnq.push(['trackViewedItem', {
+   Title: item.Name,
+   ItemId: item.ProductID,
+   Categories: item.Categories,
+   ImageUrl: item.ImageURL,
+   Url: item.URL,
+   Metadata: {
+     Brand: item.Brand,
+     Price: item.Price,
+     CompareAtPrice: item.CompareAtPrice
+   }
+ }]);
+</script>

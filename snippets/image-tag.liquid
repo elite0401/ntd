@@ -1,0 +1,12 @@
+{% comment %} SpeedBoostr_2019 {% endcomment %}
+{%- if image_tag_src -%}
+{%- unless image_tag_sizing -%}
+    {%- assign image_tag_sizing = "2048x" -%}
+{%- endunless -%}
+{%- assign image_tag_src_src =  image_tag_src | img_url: image_tag_sizing -%}
+{%- if image_tag_src contains ".jpg" or image_tag_src contains ".jpeg"%}
+    {%- assign image_tag_src_src =  image_tag_src | img_url: image_tag_sizing, format: 'pjpg' -%}
+{% endif %}
+{% comment %} SpeedBoostr 3-7 {% endcomment %}
+<img {%- if image_tag_classes contains "lazyload" %} data-{% else %} {%- endif %}src="{{image_tag_src_src}}" alt="{{ image_tag_alt }}" class="{{image_tag_classes}}" {%- if image_tag_itemprop -%}itemprop="{{image_tag_itemprop}}"{%- endif -%} {{image_tag_data}}>
+{%- endif -%}

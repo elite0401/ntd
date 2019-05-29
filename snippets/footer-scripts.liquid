@@ -1,0 +1,8 @@
+{% if settings.footer_scripts != "" %}{{settings.footer_scripts}}{% endif %}
+{% if settings.footer_snippets_1 != blank %}{% include settings.footer_snippets_1 %}{% endif %}
+{% if settings.footer_snippets_2 != blank %}{% include settings.footer_snippets_2 %}{% endif %}
+{% if settings.footer_snippets_3 != blank %}{% include settings.footer_snippets_3 %}{% endif %}
+{% if settings.footer_snippets_4 != blank %}{% include settings.footer_snippets_4 %}{% endif %}
+{% if settings.footer_snippets_5 != blank %}{% include settings.footer_snippets_5 %}{% endif %}
+{% include 'gs-scripts-footer' %}
+{% include 'customer-scripts-footer' %}

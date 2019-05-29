@@ -1,0 +1,24 @@
+{% assign number_of_products_to_fetch = 50 %}
+
+{% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+  {% assign found_a_collection = false %}
+  {% for c in product.collections %}
+    {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+      {% assign found_a_collection = true %}
+      {% assign collection = c %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if collection and collection.products_count > 1 %}
+<div class="related-products row" data-rp-pick data-pick="{{section.settings.related_products_count}}">
+    {% assign current_product = product %}
+    {% for grid_product in collection.products limit: number_of_products_to_fetch %}
+      {% if grid_product.handle == current_product.handle %}
+        {% continue %}
+      {% else %}
+        {% include 'product-grid-item' column_flex: true, quick_view: section.settings.related_products_quick_view %}
+      {% endif %}
+    {% endfor %}
+</div>
+{% endif %}

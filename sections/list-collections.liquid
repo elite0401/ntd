@@ -1,0 +1,150 @@
+<div class="large-12 small-12 columns page-bg-banner text-center image-center-center" {% if section.settings.banner != empty %}style="background-image: url({%- include 'image-src', image_src: section.settings.banner, image_src_sizing: "2048x" %});"{% endif %}>
+  {% if section.settings.title != empty and section.settings.display_title_img %}<h1>{{section.settings.title}}</h1>{% endif %}
+  {% if section.settings.description != empty and section.settings.display_description_img %}<p>{{section.settings.description}}</p>{% endif %}
+</div>
+
+{% if section.settings.display_title_img == false or section.settings.display_description_img == false %}
+  <div class="large-12 small-12 columns text-center">
+    {% if section.settings.title != emtpy and section.settings.display_title_img == false %}<h1>{{section.settings.title}}</h1>{% endif %}
+    {% if section.settings.description != empty and section.settings.display_description_img == false %}<p>{{section.settings.description}}</p>{% endif %}
+  </div>
+{% endif %}
+
+<div class="row">
+
+  {% include 'breadcrumbs' %}
+
+  <div class="small-12 medium-12 large-12 columns">
+    <div class="row">
+      {% if section.settings.list != blank %}
+        {% assign object_list = linklists[section.settings.list].links %}
+      {% else %}
+        {% assign object_list = collections %}
+      {% endif %}
+      {% for this_object in object_list %}
+      
+        {% assign display_title = this_object.title %}
+        {% if this_object.description %}
+          {% assign collection = this_object %}
+        {% else %}
+          {% assign collection = this_object.object %}
+          {% unless section.settings.link_title %}
+            {% assign display_title = collection.title %}
+          {% endunless %}
+        {% endif %}
+      
+        <div class="{{section.settings.classes}} columns">
+          {% if section.settings.display_image %}
+            <a class="col-img" href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: title }}">
+              {% if collection.image != blank %}
+                {% include 'image-tag',
+                  image_tag_src : collection.image,
+                  image_tag_alt: collection.title
+                  image_tag_sizing: "2048x" %}
+              {% elsif collection.products.first != blank and collection.products.first.featured_image %}
+                {% include 'image-tag',
+                  image_tag_src : collection.products.first.featured_image,
+                  image_tag_alt: collection.title
+                  image_tag_sizing: "2048x" %}
+              {% else %}
+                {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+              {% endif %}
+            </a>
+          {% endif %}
+          {% if section.settings.display_title %}
+            <p><a class="col-name" href="{{ collection.url }}" title="{{display_title}}">{{ display_title }}</a></p>
+          {% endif %}
+          {% if section.settings.display_description %}
+            <p>{{ collection.description }}</p>
+          {% endif %}
+          </div>
+          
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Collection List Page",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Banner Options"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner",
+        "label": "Banner Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title_img",
+        "label": "Display Title On Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_description_img",
+        "label": "Display Description On Image",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Display Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "Enable Breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "list",
+        "label": "Collections Menu",
+        "info": "If not used, page will display all visible collections"
+      },
+      {
+        "type": "checkbox",
+        "id": "link_title",
+        "label": "Use Menu Item Title"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_title",
+        "label": "Display Collection Title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_description",
+        "label": "Display Collection Description",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "display_image",
+        "label": "Display Collection Image",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "classes",
+        "label": "Grid Item Classes",
+        "default": "small-12 medium-4 large-4"
+      }
+    ]
+  }
+{% endschema %}

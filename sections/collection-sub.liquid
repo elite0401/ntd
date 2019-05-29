@@ -1,0 +1,61 @@
+<div class="row abide" data-section-id="{{ section.id }}" data-section-type="collection-sub">
+  {% for this_link in linklists[collection.handle].links %}
+    {% assign sub_collection = this_link.object %}
+    <div class="{{section.settings.grid_item_classes}} columns">
+      {% if section.settings.display_image %}
+        <a class="col-img" href="{{ sub_collection.url }}" title="{{ 'collections.general.link_title' | t: title: sub_collection.title }}">
+          {% if sub_collection.image != blank %}
+            {% include 'image-tag',
+            image_tag_src : sub_collection.image,
+            image_tag_alt: sub_collection.title
+            image_tag_sizing: "2048x" %}
+          {% elsif sub_collection.products.first != blank and sub_collection.products.first.featured_image %}
+            {% include 'image-tag',
+            image_tag_src : sub_collection.products.first.featured_image,
+            image_tag_alt: sub_collection.title
+            image_tag_sizing: "2048x" %}
+          {% else %}
+            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+            {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+          {% endif %}
+        </a>
+      {% endif %}
+      {% if section.settings.display_title %}<p><a class="col-name" href="{{ sub_collection.url }}" title="{{sub_collection.title}}">{{ sub_collection.title }}</a></p>{% endif %}
+      {% if section.settings.display_description %}
+        <p>{{ sub_collection.description }}</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+  
+{% schema %}
+  {
+    "name": "Sub Collections",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_title",
+        "label": "Display Title",
+        "default": true
+      },
+       {
+        "type": "checkbox",
+        "id": "display_image",
+        "label": "Display Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_description",
+        "label": "Display Description",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "grid_item_classes",
+        "label": "Grid Item Classes",
+        "default": "small-6 large-4"
+      }
+    ]
+  }
+{% endschema %}

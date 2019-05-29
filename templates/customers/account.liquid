@@ -1,0 +1,71 @@
+<!--<div class="row">-->
+<!--<div class="small-12 medium-8 large-9 columns">-->
+<!--<h1>{{ 'customer.account.title' | t }}</h1>-->
+<!--</div>-->
+<!--<div class="small-12 medium-4 large-3 columns">-->
+<!--<br/>-->
+<!--  <a href="/account/logout" class="button outline" id="customer_logout_link">Log out</a>-->
+<!--</div>-->
+<!--</div>-->
+<div class="row">
+<div class="small-12 medium-12 large-12 text-center columns">
+<h1>{{ 'customer.account.title' | t }}</h1>
+
+  <a href="/account/logout" class="button outline small" id="customer_logout_link">Log out</a>
+  <hr>
+</div>
+</div>
+
+<div class="row">
+<div class="small-12 medium-8 large-9 columns">
+<h2>{{ 'customer.orders.title' | t }}</h2>
+
+{% paginate customer.orders by 20 %}
+  {% if customer.orders.size != 0 %}
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th>{{ 'customer.orders.order_number' | t }}</th>
+          <th>{{ 'customer.orders.date' | t }}</th>
+          <th>{{ 'customer.orders.payment_status' | t }}</th>
+          <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+          <th>{{ 'customer.orders.total' | t }}</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in customer.orders %}
+          <tr class="responsive-table-row">
+            <td data-label="{{ 'customer.orders.order_number' | t }}">{{ order.name | link_to: order.customer_url }}</td>
+            <td data-label="{{ 'customer.orders.date' | t }}">{{ order.created_at | date: format: 'month_day_year' }}</td>
+            <td data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+            <td data-label="{{ 'customer.orders.fulfillment_status' | t }}">{{ order.fulfillment_status_label }}</td>
+            <td data-label="{{ 'customer.orders.total' | t }}">{{ order.total_price | money }}</td>
+            <td>
+              <a class="button order-reorder" data-order="{{order.id}}">{{ 'customer.orders.reorder' | t }}</a>
+              <textarea class="hide" id="order-data-{{order.id}}">{{order.line_items | json}}</textarea>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{{ 'customer.orders.none' | t }}</p>
+  {% endif %}
+
+  {% if paginate.pages > 1 %}
+    {% include 'pagination' %}
+  {% endif %}
+
+{% endpaginate %}
+
+</div>
+<div class="small-12 medium-4 large-3 columns">
+
+<h2>{{ 'customer.account.details' | t }}</h2>
+
+{{ customer.default_address | format_address }}
+
+<a href="/account/addresses" class="button">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a>
+</div>
+</div>

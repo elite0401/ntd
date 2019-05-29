@@ -1,0 +1,70 @@
+{% comment %}
+  Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+
+{% assign file_extension = 'png' %}
+
+{% assign swatch = product-swatch %}
+{% assign found_option = false %}
+{% assign is_color = false %}
+{% assign option_index = 0 %}
+
+{% for option in product.options %}
+  {% if option == swatch %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+    {% assign downcased_option = swatch | downcase %}
+    {% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+      {% assign is_color = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+<div class="swatch clearfix" data-option-index="{{ option_index }}">
+  <div class="prod-options">
+  <div class="opt-label">{{ swatch }}: <span class="opt-name" data-option-selector="{{ option_index }}"></span>
+    {% if option_index == 0 %}
+    <span class="out-of-stock-notify" data-out-of-stock-notify>This style is not available in your size</span>
+    {% endif %}
+  </div>
+  {% assign values = '' %}
+  {% for variant in product.variants %}
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %}
+      {% assign values = values | split: ',' %}
+
+      {% comment %}
+        Select the option value of the first or selected variant. This should be the default checked radio input
+      {% endcomment %}
+      {% if option_index == 2 %}
+        {% assign default_swatch_value = product.selected_or_first_available_variant.option3 %}
+      {% elsif option_index == 1 %}
+        {% assign default_swatch_value = product.selected_or_first_available_variant.option2 %}
+      {% else %}
+        {% assign default_swatch_value = product.selected_or_first_available_variant.option1 %}
+      {% endif %}
+
+      <input id="swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if value == default_swatch_value %} checked{% endif %} data-variant-info="{{ value | downcase | handleize }}" />
+      <div data-value="{{ value | escape }}" class="swatch-element swatch {{ swatch | downcase }}-swatch {% if is_color %}color {% endif %}{{ value | handle }}-swatch {% if variant.available %}available{% else %}soldout{% endif %}">
+        {% comment %}
+        {% if is_color %}
+          <div class="tooltip">{{ value }}</div>
+        {% endif %}
+        {% endcomment %}
+        {% if is_color %}
+          <label for="swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}" style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_img_url: '50x' | prepend: 'https:' }}); background-color: {{ value | split: ' ' | last | handle }};">
+            <span class="crossed-out"></span>
+          </label>
+        {% else %}
+          <label for="swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}">
+            {{ value | replace: " months", "M" }}
+            <span class="crossed-out"></span>
+          </label>
+        {% endif %}
+      </div>
+    {% endunless %}
+  {% endfor %}
+  </div>
+</div>

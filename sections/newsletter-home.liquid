@@ -1,0 +1,37 @@
+{% include 'newsletter-form-display', newsletter_settings : section.settings %}
+
+{% schema %}
+  {
+    "name": "Newsletter Form",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "newsletter_text",
+        "label": "Newsletter promo text"
+      },
+      {
+        "type": "textarea",
+        "id": "newsletter_text_classes",
+        "label": "Promo Area Classes",
+        "default": "small-12 large-expand medium-expand large-text-right small-text-center"
+      },
+      {
+        "type": "html",
+        "id": "newsletter_embed",
+        "label": "Third party embed code"
+      },
+      {
+        "type": "textarea",
+        "id": "newsletter_embed_classes",
+        "label": "Embed Area Classes",
+        "default": "small-12 large-expand medium-expand small-only-text-center"
+      }
+    ],
+    "presets": [
+        {
+        "name": "Newsletter Form",
+        "category": "Social Media/Promotional"
+        }
+    ]
+  }
+{% endschema %}

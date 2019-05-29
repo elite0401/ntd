@@ -1,0 +1,35 @@
+{% for grid_product in grid_collection.products %}
+
+  {% assign unique_values_displayed = "" | split: "~~~" %}
+
+  {% for grid_product_option in grid_product.options_with_values %}
+  
+    {% if forloop.index == unpack_option %}
+    
+      {% for grid_product_option_value in grid_product_option.values %}
+      
+        {% for grid_variant in grid_product.variants %}
+        
+          {% assign grid_variant_value = grid_variant.option1 %}
+          {% if unpack_option == 2 %}{% assign grid_variant_value = grid_variant.option2 %}{% endif %}
+          {% if unpack_option == 3 %}{% assign grid_variant_value = grid_variant.option3 %}{% endif %}
+          
+          {% if grid_variant_value == grid_product_option_value %}
+          
+            {% if section.settings.unpack_hide_unavailable and grid_variant.inventory_quantity <= 0 %}
+              {% continue %}
+            {% endif %}
+            
+            {% unless unique_values_displayed contains grid_variant_value %}
+              {% include 'product-grid-item', grid_variant: grid_variant, grid_product: grid_product, quick_view: quick_view, grid_item_classes: grid_item_classes %}
+              {% assign unique_values_displayed_str = unique_values_displayed | join: "~~~" | append: "~~~" | append: grid_variant_value %}
+              {% assign unique_values_displayed = unique_values_displayed_str | split: "~~~" %}
+            {% endunless %}
+            
+          {% endif %}
+          
+        {% endfor %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}

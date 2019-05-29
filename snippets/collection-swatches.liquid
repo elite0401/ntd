@@ -1,0 +1,61 @@
+{% assign file_extension = 'png' %}
+
+{% for option in grid_product.options %}
+{% assign downcased_option = option | downcase %}
+{% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+  {% assign option_index = forloop.index0 %}
+  {% assign values = '' %}
+  <div class="collection_swatches" data-collection-swatches>
+    <div class="option_title">{{ downcased_option | capitalize }}</div>
+    {% for variant in grid_product.variants %}
+      {% assign value = variant.options[option_index] %}
+      {% unless values contains value %}
+        {% assign values = values | join: ',' %}
+        {% assign values = values | append: ',' | append: value %}
+        {% assign values = values | split: ',' %}
+        
+        {% assign secImg = 'no-image' %}
+        {% for img in grid_product.images %}
+          {% if value == img.alt %}
+            {% assign secImg = img | img_url: '1024x' %}
+          {% endif %}
+        {% endfor %}
+      
+        <div class="swatch {% if forloop.index0 == 0 %}active{% endif %}" data-swatch-name="meta-{{ downcased_option }}_{{ value | replace: ' ', '_' | downcase }}" data-option-index="{{ forloop.index0 }}" data-value="{{ value | escape }}" data-variant-id="{{ variant.id }}" data-variant-link="{{ variant.url | within: collection }}" data-variant-available="{{ variant.available }}">
+          <span {% if section.settings.products_per_row == 2 %}
+                  data-image="{{ variant.featured_image | product_img_url: '600x' }}"
+                {% elsif section.settings.products_per_row == 3 %}
+                  data-image="{{ variant.featured_image | product_img_url: '500x' }}"
+                {% else %}
+                  data-image="{{ variant.featured_image | product_img_url: '1024x' }}"
+                  data-secImg="{{ secImg }}"
+                {% endif %}
+                style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_img_url: '50x' | prepend: 'https:' }}); background-color: {{ value | split: ' ' | last | handle }}; position: relative;">
+            </span>
+        </div>
+      {% endunless %}
+    {% endfor %}
+  </div>
+{% elsif downcased_option contains 'size' %}
+  {% assign option_index = forloop.index0 %}
+  {% assign values = '' %}
+  <div class="collection_swatches" data-collection-swatches>
+    <div class="option_title">{{ downcased_option | capitalize }}</div>
+    {% for variant in grid_product.variants %}
+      {% assign value = variant.options[option_index] %}
+      {% unless values contains value %}
+        {% assign values = values | join: ',' %}
+        {% assign values = values | append: ',' | append: value %}
+        {% assign values = values | split: ',' %}
+
+        <div class="swatch {% if forloop.index0 == 0 %}active{% endif %} size-swatch" data-swatch-name="meta-{{ downcased_option }}_{{ value | replace: ' ', '_' | downcase }}" data-option-index="{{ forloop.index0 }}" data-value="{{ value | escape }}" data-variant-id="{{ variant.id }}" data-variant-link="{{ variant.url | within: collection }}">
+          <span data-image="no-image" data-secImg="no-image">
+                {{ value | replace: "months", "m" }}
+            </span>
+        </div>
+      {% endunless %}
+    {% endfor %}
+  
+  </div>
+{% endif %}
+{% endfor %}

@@ -1,0 +1,129 @@
+{%- assign collection = collections[section.settings.collection] -%}
+
+<div data-section-id="{{ section.id }}" data-section-type="featured-collection">
+
+  <div class="row">
+    <div class="small-12 columns">
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title | escape }}</h2>
+      {% endif %}
+    </div>
+  </div>
+  
+  {% if section.settings.slider %}
+    <div
+      id="{{section.id}}"
+      class="featured-collection-products dyno-slider {{section.settings.classes}}"
+      data-slider-arrows="{{section.settings.arrows}}"
+      data-slider-dots="{{section.settings.dots}}"
+      data-slider-infinite="{{section.settings.infinite}}"
+      data-slider-slides-to-show="{{section.settings.slides_to_show}}"
+      data-slider-slides-to-show-small="{{section.settings.slides_to_show_small}}"
+      data-slider-slides-to-show-medium="{{section.settings.slides_to_show_medium}}"
+      data-slider-slides-to-scroll="{{section.settings.slides_to_scroll}}"
+      data-slider-autoplay="{{section.settings.slider_autoplay}}"
+      data-slider-autoplay-secs="{{section.settings.slider_autoplay_secs}}">
+  {% else %}
+    <div class="row featured-collection-products">
+  {% endif %}
+    {% for grid_product in collection.products limit: 50 %}
+      {% include 'product-grid-item', slider: section.settings.slider, grid_item_classes: section.settings.grid_item_classes %} 
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Featured Collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Featured collection"
+      },
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "textarea",
+        "id": "grid_item_classes",
+        "label": "Grid Item Classes",
+        "default": "small-6 large-4",
+        "info": "Ignored if slider is enabled"
+      },
+      {
+          "type": "header",
+          "content": "Slider Settings"
+      },
+      {
+          "type": "checkbox",
+          "id": "slider",
+          "label": "Enable Slider",
+          "default":true
+      },
+      {
+          "type": "checkbox",
+          "id": "arrows",
+          "label": "Show Navigation Arrows?",
+          "default":true
+      },
+      {
+          "type": "checkbox",
+          "id": "dots",
+          "label": "Show Navigation Dots?"
+      },
+      {
+          "type": "checkbox",
+          "id": "infinite",
+          "label": "Infinite Scrolling?"
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show",
+          "label": "Slides To Show",
+          "default": 1
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show_small",
+          "label": "Slides To Show On Mobile",
+          "default": 1
+      },
+      {
+          "type": "number",
+          "id": "slides_to_show_medium",
+          "label": "Slides To Show On Tablet",
+          "default": 2
+      },
+      {
+          "type": "number",
+          "id": "slides_to_scroll",
+          "label": "Slides To Scroll",
+          "default":1
+      },
+      {
+        "type": "checkbox",
+        "id": "slider_autoplay",
+        "label": "Auto Play",
+        "default":false
+      },
+      {
+        "type": "number",
+        "id": "slider_autoplay_secs",
+        "label": "Auto Play Delay",
+        "default":2,
+        "info": "Number of seconds before scrolling"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured Collection",
+        "category": "Collection"
+      }
+    ]
+  }
+
+{% endschema %}

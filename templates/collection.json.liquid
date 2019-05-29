@@ -1,0 +1,38 @@
+{% layout none %}{% paginate collection.products by 10000 %}{
+"products": [
+{% for product in collection.products%}
+{% if forloop.index > 1%},{% endif %}
+{
+"id": {{product.id}},
+"title": "{{product.title | escape | replace: '"', '\"'}}",
+"vendor": "{{product.vendor | escape}}",
+"product_type": "{{product.type | escape}}",
+"handle": "{{product.handle}}",
+"url": "{{product.url}}",
+"price" :"{{product.price}}",
+"tags": "",
+"image": "{{product.featured_image | img_url: "2048x"}}",
+"variants": [
+{% for i in (0..99) %}
+{% assign iplus = i | plus: 1 %}
+{% if product.variants.size < iplus %}{% break %}{% endif %}
+{% if forloop.index > 1%},{% endif %}
+{
+"id":{{product.variants[i].id}},
+"sku":"{{product.variants[i].sku}}",
+"barcode":"{{product.variants[i].barcode}}",
+"weight":"{{product.variants[i].weight}}",
+"option1":"{{product.variants[i].option1 | replace: '"', '\"'}}",
+"option2":"{{product.variants[i].option2 | replace: '"', '\"'}}",
+"option3":"{{product.variants[i].option3 | replace: '"', '\"'}}",
+"price":"{{product.variants[i].price}}",
+"compare_at_price":"{{product.variants[i].compare_at_price}}",
+"qty":"{{product.variants[i].inventory_quantity}}",
+"image":"{{product.variants[i].featured_image | img_url: "2048x"}}"
+}
+{% endfor %}
+]
+}
+{% endfor %}
+]}
+{% endpaginate %}

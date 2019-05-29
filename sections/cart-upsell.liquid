@@ -1,0 +1,118 @@
+{% assign upsell_products = "" %}
+{% assign upsell_products_arr = empty %}
+
+{% for block in section.blocks %}
+  {% if upsell_products_arr contains block.settings.product_upsell %}
+    {% continue %}
+  {% endif %}
+  {% for item in cart.items %}
+    {% if block.settings.product_upsell == item.product.handle %}
+      {% break %}
+    {% endif %}
+    {% assign use_product = false %}
+    {% if block.type == 'product_rule' and item.product.handle == block.settings.product_search %}
+      {% assign use_product = true %}
+    {% elsif block.type == 'always_rule' %}
+      {% assign use_product = true %}
+    {% elsif block.type == "collection_rule" %}
+      {% for item_collection in item.product.collections %}
+        {% if item_collection.handle == block.settings.collection_search %}
+          {% assign use_product = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif  %}
+    {% if use_product %}
+      {% unless upsell_products_arr contains block.settings.product_upsell %}
+        {% assign upsell_products = upsell_products | append: block.settings.product_upsell | append: "," %} 
+        {% assign upsell_products_arr = upsell_products | split: "," %}
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% if upsell_products_arr.size > 0 %}
+  <div id="cart-upsell">
+    {% if section.settings.title != "" %}<h1>{{section.settings.title}}</h1>{% endif %}
+    {% if section.settings.description != "" %}<p>{{section.settings.description}}</p>{% endif %}
+    <div class="row">
+      {% for this_product in upsell_products_arr %}
+        {% include 'product-grid-item' grid_product: all_products[this_product], grid_item_add2cart: true, grid_item_image_size: "200x", column_flex: true, quick_view: false %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Cart Upsell",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Upsell Title"
+      },
+      {
+        "type": "html",
+        "id": "description",
+        "label": "Upsell Description"
+      }
+    ],
+    "blocks": [
+      {
+          "type": "always_rule",
+          "name": "Always Rule",
+          "settings": [
+             {
+                 "type": "product",
+                 "id": "product_upsell",
+                 "label": "Product Upsell",
+                 "info": "This product will be upsold... always."
+             }
+           ]
+      },
+      {
+          "type": "collection_rule",
+          "name": "Collection Rule",
+          "settings": [
+             {
+                 "type": "collection",
+                 "id": "collection_search",
+                 "label": "Collection Lookup",
+                 "info": "If a product in the cart is in this collection, this rule will be met"
+             },
+             {
+                 "type": "product",
+                 "id": "product_upsell",
+                 "label": "Product Upsell",
+                 "info": "This product will be upsold if rule is met (*will not be displayed if already in cart)"
+             }
+           ]
+      },
+      {
+          "type": "product_rule",
+          "name": "Product Rule",
+          "settings": [
+             {
+                 "type": "product",
+                 "id": "product_search",
+                 "label": "Product Lookup",
+                 "info": "If this product is in the cart, this rule will be met"
+             },
+             {
+                 "type": "product",
+                 "id": "product_upsell",
+                 "label": "Product Upsell",
+                 "info": "This product will be upsold if rule is met (*will not be displayed if already in cart)"
+             }
+           ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

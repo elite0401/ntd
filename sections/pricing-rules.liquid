@@ -1,0 +1,159 @@
+{% comment %}
+Enabled through general settings
+{% endcomment %}
+
+{% if template == "index.pricing_rules" %}
+{"settings": {
+  "display_type": "{{section.settings.display_type}}"
+},
+"rules":
+[
+  {"type": "none","percentage":0, "dollars":0}
+  {% for block in section.blocks %}
+    {% unless block.settings.active %}{% continue %}{% endunless %}
+    {%- assign active = false %}
+    
+    {% if block.type == "global" %}
+      {%- assign active = true %}
+    {% elsif block.type == "customer" %}
+      {%- assign tags = block.settings.tags | split: "," %}
+      {%- assign emails = block.settings.emails | split: "," %}
+      {% for tag in tags %}
+        {%- assign this_tag = tag | strip %}
+        {%- if customer and customer.tags contains this_tag %}
+          {%- assign active = true %}
+          {% break %}
+        {%- endif %}
+      {% endfor %}
+      {% for email in emails %}
+        {%- assign this_email = email | strip %}
+        {%- if customer and customer.email == this_email %}
+          {%- assign active = true %}
+          {% break %}
+        {%- endif %}
+      {% endfor %}
+    {% endif %}
+    
+    {% if active %}
+      ,{
+        "type": "{{block.type}}",
+        "percentage": {{block.settings.percentage}},
+        "dollars": {{block.settings.dollars}}
+      }
+    {% endif %}
+  {% endfor %}
+]}
+{% endif %}
+
+{% schema %}
+
+{
+  "name": "Pricing Rules",
+  "class": "pricing-rules",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Define your pricing rules below, using Blocks"
+    },
+    {
+      "type": "paragraph",
+      "content":"This feature requires Shopify Plus and a companion Shopify Script to honor any price changes in the cart."
+    },
+    {
+      "type": "paragraph",
+      "content":"Rules will be evaluated in the order they are displayed below. A rule lower in the list, if applied, will override a rule higher in the list."
+    },
+    {
+      "type":      "radio",
+      "id":        "display_type",
+      "label":     "Display Type",
+      "options": [
+        { "value": "replace", "label": "Replace Price" },
+        { "value": "strikethrough", "label": "Append & Strikethrough Original" }
+      ],
+      "default":   "replace",
+      "info":      "Choose how the price change will be displayed on the page."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "global",
+      "name": "Global Rule",
+      "settings": [
+        {
+          "type": "text",
+          "id":"title",
+          "label": "Rule Name",
+          "info": "For internal purposes."
+        },
+        {
+          "type": "checkbox",
+          "id": "active",
+          "label": "Rule Active",
+          "default": true
+        },
+        {
+          "type": "number",
+          "id":"percentage",
+          "label": "Percentage Off",
+          "info": "A percentage deduction to apply to a product's price",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id":"dollars",
+          "label": "Dollars Off",
+          "info": "Dollars deducation to apply to a product's price",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "customer",
+      "name": "Customer Rule",
+      "settings": [
+        {
+          "type": "text",
+          "id":"title",
+          "label": "Rule Name",
+          "info": "For internal purposes."
+        },
+        {
+          "type": "checkbox",
+          "id": "active",
+          "label": "Rule Active",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id":"tags",
+          "label": "Customer Tag(s)",
+          "info": "A comma separated list of customer tags for which this rule should apply."
+        },
+        {
+          "type": "textarea",
+          "id":"emails",
+          "label": "Customer Email(s)",
+          "info": "A comma separated list of email addresses for which this rule should apply."
+        },
+        {
+          "type": "number",
+          "id":"percentage",
+          "label": "Percentage Off",
+          "info": "A percentage deduction to apply to a product's price",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id":"dollars",
+          "label": "Dollars Off",
+          "info": "Dollars deducation to apply to a product's price",
+          "default": 0
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}

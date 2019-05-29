@@ -1,0 +1,89 @@
+{% if collection_crumb == empty %}
+    {% for link in linklists[section.settings.breadcrumbs_search_list].links %}
+        {% if collection_crumb != empty %}{% break %} {% endif %}
+        {% if link.levels > 0 %}
+            {% for link2 in link.links %}
+                {% if collection_crumb != empty  %}{% break %} {% endif %}
+                {% if link2.levels > 0 %}
+                    {% for link3 in link2.links %}
+                        {% if collection_crumb != empty  %}{% break %} {% endif %}
+                        {% if link3.type == "collection_link" %}
+                            {% if link3.object.handle == collection.handle %}
+                                {% assign collection_crumb = link3.object %}
+                                {% if link2.type == "collection_link" %}
+                                    {% assign collection_pre = link2.object %}
+                                {% endif %}
+                                {% if link.type == "collection_link" %}
+                                    {% assign collection_pre_pre = link.object %}
+                                {% endif %}
+                                {% break %}
+                            {% else %}
+                                {% for pc in product.collections %}
+                                    {% if pc.handle == link3.object.handle %}
+                                        {% assign collection_crumb = link3.object %}
+                                        {% if link2.type == "collection_link" %}
+                                            {% assign collection_pre = link2.object %}
+                                        {% endif %}
+                                        {% if link.type == "collection_link" %}
+                                            {% assign collection_pre_pre = link.object %}
+                                        {% endif %}
+                                        {% break %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if collection_crumb == empty %}
+    {% for link in linklists[section.settings.breadcrumbs_search_list].links %}
+        {% if collection_crumb != empty  %}{% break %} {% endif %}
+        {% if link.levels > 0 %}
+            {% for link2 in link.links %}
+                {% if collection_crumb != empty  %}{% break %} {% endif %}
+                {% if link2.type == "collection_link" %}
+                    {% if link2.object.handle == collection.handle %}
+                        {% assign collection_crumb = link2.object %}
+                        {% if link.type == "collection_link" %}
+                            {% assign collection_pre = link.object %}
+                        {% endif %}
+                        {% break %}
+                    {% else %}
+                        {% for pc in product.collections %}
+                            {% if pc.handle == link2.object.handle %}
+                                {% assign collection_crumb = link2.object %}
+                                {% if link.type == "collection_link" %}
+                                    {% assign collection_pre = link.object %}
+                                {% endif %}
+                                {% break %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if collection_crumb == empty %}
+    {% for link in linklists[section.settings.breadcrumbs_search_list].links %}
+        {% if collection_crumb != empty  %}{% break %} {% endif %}
+        {% if link.type == "collection_link" %}
+            {% if link.object.handle == collection.handle %}
+                {% assign collection_crumb = link.object %}
+                {% break %}
+            {% else %}
+                {% for pc in product.collections %}
+                    {% if pc.handle == link.object.handle %}
+                        {% assign collection_crumb = link.object %}
+                        {% break %}
+                    {% endif %}
+                {% endfor %}
+            {% endif%}
+        {% endif %}
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,186 @@
+{% assign dyno_block_header = block.settings.header %}
+{% assign dyno_block_bgimage = block.settings.bgimage %}
+{% assign dyno_block_image_1 = block.settings.image_1 %}
+{% assign dyno_block_image_2 = block.settings.image_2 %}
+{% assign dyno_block_image_3 = block.settings.image_3 %}
+{% assign dyno_block_btn_text = block.settings.btn_text %}
+{% assign dyno_block_btn_link = block.settings.btn_link %}
+{% assign dyno_block_btn_attributes = block.settings.btn_attributes %}
+{% assign dyno_block_text = block.settings.text %}
+{% assign dyno_block_object_text = "" %}
+{% assign dyno_block_video = block.settings.video_url %}
+{% assign dyno_block_object = blank %}
+    
+{% if block.type == "collection" %}
+    {% assign dyno_block_object = collections[block.settings.object] %}
+    {% assign dyno_block_header = dyno_block_object.title %}
+    {% if block.settings.object_image_bg %}
+        {% assign dyno_block_bgimage = dyno_block_object.image %}
+    {% endif %}
+    {% if block.settings.object_image_content %}
+        {% assign dyno_block_image_1 = dyno_block_object.image %}
+    {% endif %}
+    {% assign dyno_block_btn_link = dyno_block_object.url %}
+    {% if block.settings.text_enable %}
+        {% assign dyno_block_object_text = dyno_block_object.description | truncatewords: block.settings.text_words %}
+    {% endif %}
+{% elsif block.type == "product" %}
+    {% assign dyno_block_object = all_products[block.settings.object] %}
+    {% assign dyno_block_header = dyno_block_object.title %}
+    {% if block.settings.object_image_bg %}
+        {% assign dyno_block_bgimage = dyno_block_object.featured_image %}
+    {% endif %}
+    {% if block.settings.object_image_content %}
+        {% assign dyno_block_image_1 = dyno_block_object.featured_image %}
+    {% endif %}
+    {% for img in dyno_block_object.images %}
+        {% if img.alt == "dyno" %}
+            {% if dyno_block_image_1 == blank %}
+                {% assign dyno_block_image_1 = img %} 
+            {% elsif dyno_block_image_2 == blank %}
+                {% assign dyno_block_image_2 = img %} 
+            {% elsif dyno_block_image_3 == blank %}
+                {% assign dyno_block_image_3 = img %} 
+            {% else %}
+                {% break %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% assign dyno_block_btn_link = dyno_block_object.url %}
+    {% capture dyno_block_btn_attributes %}data-handle="{{block.settings.object}}"{% endcapture %}
+    {% if block.settings.text_enable %}
+        {% assign dyno_block_object_text = dyno_block_object.description | truncatewords: block.settings.text_words %}
+    {% endif %}
+{% elsif block.type == "article" %}
+    {% assign dyno_block_object = articles[block.settings.object] %}
+    {% assign dyno_block_header = dyno_block_object.title %}
+    {% if block.settings.object_image_bg %}
+        {% assign dyno_block_bgimage = dyno_block_object.image %}
+    {% endif %}
+    {% if block.settings.object_image_content %}
+        {% assign dyno_block_image_1 = dyno_block_object.image %}
+    {% endif %}
+    {% assign dyno_block_btn_link = dyno_block_object.url %}
+    {% if block.settings.text_enable %}
+        {% assign dyno_block_object_text = dyno_block_object.content | truncatewords: block.settings.text_words %}
+    {% endif %}
+{% elsif block.type == "page" %}
+    {% assign dyno_block_object = pages[block.settings.object] %}
+    {% assign dyno_block_btn_link = dyno_block_object.url %}
+    {% assign dyno_block_object_text = dyno_block_object.content | truncatewords: block.settings.text_words %}
+{% elsif block.type == "snippet" and block.settings.snippet != "" %}
+    {% capture dyno_block_object_text %}{% include block.settings.snippet %}{% endcapture %}
+{% elsif block.type == "menu" and block.settings.object %}
+    {% assign dyno_block_object = linklists[block.settings.object] %}
+    {% capture dyno_block_object_text %}
+        <ul class="vertical menu accordion-menu" data-accordion-menu>
+            {% for link in dyno_block_object.links %}
+                <li>
+                    <a href="{{ link.url }}" class="nav-link">{{ link.title }}</a>
+                    {% if link.levels > 0 %}
+                      <ul class="menu vertical nested dom-style-remove" style="display:none;">
+                        {% for link2 in link.links %}
+                          <li>
+                            <a href="{{ link2.url }}" class="nav-link">{{ link2.title }}</a>
+                            {% if link2.levels > 0 %}
+                              <ul class="menu vertical nested">
+                                {% for link3 in link2.links %}
+                                  <li><a href="{{ link3.url }}" class="nav-link">{{ link3.title }}</a></li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+            {% endfor %}
+        </ul>
+    {% endcapture %}
+{% elsif block.type == "blog_posts" %}
+    {% if template.name == "blog" or template.name == "article" %}
+        {% assign dyno_block_object = blog %}
+    {% endif %}
+    {% if block.settings.object != empty %}
+        {% assign dyno_block_object = blogs[block.settings.object] %}
+    {% endif %}
+    {% if dyno_block_object %}
+        {% assign max_posts = block.settings.max_posts %}
+        {% if block.settings.hide_current and template.name == "article" %}
+            {% for block_article in dyno_block_object.articles limit: block.settings.max_posts %}
+                {% if block_article.handle == article.handle %}
+                    {% assign max_posts = max_posts | plus: 1 %}
+                    {% break %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    
+        {% capture dyno_block_object_text %}
+            <ul>
+                {% for block_article in dyno_block_object.articles limit: max_posts %}
+                    {% if block.settings.hide_current and template.name == "article" and article.handle == block_article.handle %}
+                        {% continue %}
+                    {% endif %}
+                    <li><a href="{{block_article.url}}">{{block_article.title}}</a></li>
+                {% endfor %}
+            </ul>
+        {% endcapture %}
+    {% endif %}
+{% elsif block.type == "blog_tags" %}
+    {% if template.name == "blog" or template.name == "article" %}
+        {% assign dyno_block_object = blog %}
+    {% endif %}
+    {% if block.settings.object != empty %}
+        {% assign dyno_block_object = blogs[block.settings.object] %}
+    {% endif %}
+    {% if dyno_block_object %}
+        {% capture dyno_block_object_text %}
+            <ul class="no-bullets blog-tags xtra-tags">
+              {% for tag in dyno_block_object.all_tags %}
+        
+                {% if current_tags contains tag %}
+                  <li>{{ tag }}</li>
+                {% else %}
+                  <li><a href="{{dyno_block_object.url}}/tagged/{{ tag | handleize }}">{{tag}}</a></li>
+                {% endif %}
+        
+              {% endfor %}
+            </ul>
+        {% endcapture %}
+    {% endif %}
+{% elsif block.type == "collection_filter" %}
+    {% if template.name == "collection" %}
+        {% assign dyno_block_object = collection %}
+    {% endif %}
+    {% if block.settings.object != empty %}
+        {% assign dyno_block_object = collections[block.settings.object] %}
+    {% endif %}
+    {% if dyno_block_object %}
+        {% assign possible_tags = block.settings.filter_tags | split: ',' %}
+        {% capture dyno_block_object_text %}
+            <ul class="no-bullets collection-tags xtra-tags">
+              {% for tag in possible_tags %}
+                {% assign this_tag = tag | strip %}
+                {% if current_tags contains this_tag %}
+                  <li class="active">{{ this_tag | link_to_remove_tag: this_tag }}</li>
+                {% else %}
+                  <li>{{ this_tag | link_to_add_tag: this_tag }}</li>
+                {% endif %}
+        
+              {% endfor %}
+            </ul>
+        {% endcapture %}
+    {% endif %}
+{% elsif block.type == "newsletter" %}
+    {% capture dyno_block_object_text %}
+        {% include 'newsletter-form-display', newsletter_settings : block.settings %}
+    {% endcapture %}
+{% elsif block.type == "video_content" %}
+    {% if dyno_block_video.type == "youtube" %}
+        {% assign dyno_block_video = "https://www.youtube.com/embed/" | append: dyno_block_video.id %}
+    {% elsif dyno_block_video contains "vimeo" %}
+        {% assign dyno_block_video = "https://player.vimeo.com/video/" | append: dyno_block_video.id %}
+    {% elsif dyno_block_video != "" %}
+        <h3>Invalid Video URL</h3>
+    {% endif %}
+{% endif %}

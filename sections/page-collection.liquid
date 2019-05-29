@@ -1,0 +1,61 @@
+{%- assign collection = collections[section.settings.collection] -%}
+<div class="row">
+
+  {% if collection.products.size == 0 %}
+    <p>{{ 'collections.general.no_matches' | t }}</p>
+  {% elsif unpack_option > 0 %}
+    {% include 'collection-grid-unpacked', grid_collection: collection, unpack_option: unpack_option, quick_view: section.settings.quick_view, grid_item_classes: section.settings.grid_item_classes  %}
+  {% else %}
+    {% for grid_product in collection.products %}
+      {% include 'product-grid-item', grid_item_loop_index: forloop.index0, quick_view: section.settings.quick_view, grid_item_classes: section.settings.grid_item_classes, grid_item_add2cart: section.settings.display_addtocart_button %}
+    {% else %}
+      <p>{{ 'collections.general.no_matches' | t }}</p>
+    {% endfor %}
+  {% endif %}
+
+</div>
+
+{% schema %}
+  {
+    "name": "Collection on Page",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Featured collection"
+      },
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "textarea",
+        "id": "grid_item_classes",
+        "label": "Grid Item Classes",
+        "default": "small-6 large-4",
+        "info": "Ignored if slider is enabled"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_addtocart_button",
+        "label": "Display Add to Cart Button",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_swatches",
+        "label": "Display Swatches",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection on Page",
+        "category": "Collection"
+      }
+    ]
+  }
+
+{% endschema %}
